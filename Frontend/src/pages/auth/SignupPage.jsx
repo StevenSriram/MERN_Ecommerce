@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 
 import { registerFormControls } from "../../utils/formControls";
 import { CommonForm } from "../../components/custom";
+import { useDispatch } from "react-redux";
+
+import { signupUser } from "../../store/slices/authSlice";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -10,10 +13,14 @@ const SignupPage = () => {
     email: "",
     password: "",
   });
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Email: ${formData.email}, Password: ${formData.password}`);
+
+    dispatch(signupUser(formData)).then(() => {
+      alert("Signup successful");
+    });
   };
 
   return (
@@ -30,7 +37,7 @@ const SignupPage = () => {
           formControls={registerFormControls}
           formData={formData}
           setFormData={setFormData}
-          onSubmit={handleSubmit}
+          handleSubmit={handleSubmit}
           buttonText={"Sign Up"}
         />
       </div>

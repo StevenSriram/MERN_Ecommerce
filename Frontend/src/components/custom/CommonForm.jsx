@@ -10,6 +10,10 @@ import {
   SelectItem,
 } from "../ui/select";
 
+import { Loader } from "lucide-react";
+
+import { useSelector } from "react-redux";
+
 const CommonForm = ({
   formControls,
   formData,
@@ -17,6 +21,8 @@ const CommonForm = ({
   handleSubmit,
   buttonText,
 }) => {
+  const { isLoading, error } = useSelector((state) => state.auth);
+
   const renderComponent = (controlItem) => {
     const { componentType, ...inputProps } = controlItem;
 
@@ -75,8 +81,15 @@ const CommonForm = ({
           </div>
         ))}
       </div>
-      <Button type="submit" className="mt-4 w-full">
-        {buttonText || "Submit"}
+
+      {error && (
+        <p className="text-sm text-center mt-3 font-medium text-red-500">
+          {error}
+        </p>
+      )}
+
+      <Button type="submit" disabled={isLoading} className="mt-4 w-full">
+        {isLoading ? <Loader className="w-6 h-6 animate-spin" /> : buttonText}
       </Button>
     </form>
   );

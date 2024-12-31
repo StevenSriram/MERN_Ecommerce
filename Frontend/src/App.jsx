@@ -16,7 +16,6 @@ import {
   CheckoutPage,
   ListingPage,
 } from "./pages/shop";
-
 import { NotFoundPage, UnAuthPage } from "./pages/others";
 
 import { Authorization } from "./components/custom";
@@ -30,8 +29,8 @@ const App = () => {
 
       <Suspense
         fallback={
-          <div className="grid place-items-center">
-            <img src="./assets/lazyLoader.gif" />
+          <div className="min-h-screen w-full grid place-items-center">
+            <img src="/lazyLoader.gif" />
           </div>
         }
       >

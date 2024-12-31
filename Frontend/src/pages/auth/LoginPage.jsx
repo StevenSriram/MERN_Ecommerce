@@ -10,10 +10,11 @@ function LoginPage() {
     password: "",
   });
 
-  function onSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
+
     alert(`Email: ${formData.email}, Password: ${formData.password}`);
-  }
+  };
 
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
@@ -28,7 +29,7 @@ function LoginPage() {
         buttonText={"Sign In"}
         formData={formData}
         setFormData={setFormData}
-        onSubmit={onSubmit}
+        handleSubmit={handleSubmit}
       />
 
       <p className="mt-2 text-center">

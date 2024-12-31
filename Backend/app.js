@@ -1,10 +1,14 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
-import connectDB from "./db/configDB.js";
 import helmet from "helmet";
 import morgan from "morgan";
+
+import connectDB from "./db/configDB.js";
+import authRoutes from "./routes/auth.routes.js";
 
 // ? Configuring dotenv with path
 dotenv.config({
@@ -14,8 +18,22 @@ dotenv.config({
 const app = express();
 const port = process.env.PORT || 3000;
 
+// ? Middle - Wares
+app.use(express.json());
+app.use(
+  cors({
+    origin: [process.env.CLIENT_URL],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+app.use(cookieParser());
+
 app.use(helmet());
 app.use(morgan("dev"));
+
+// ? Authentication Routes
+app.use("/api/auth", authRoutes);
 
 // * Testing Route
 app.get("/", (req, res) => {
