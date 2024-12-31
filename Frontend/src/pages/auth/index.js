@@ -1,6 +1,7 @@
-import AuthLayout from "./layout/AuthLayout";
+import { lazy } from "react";
 
-import LoginPage from "./LoginPage";
-import SignupPage from "./SignupPage";
+const AuthLayout = lazy(() => import("./layout/AuthLayout"));
+const LoginPage = lazy(() => import("./LoginPage"));
+const SignupPage = lazy(() => import("./SignupPage"));
 
 export { AuthLayout, LoginPage, SignupPage };

@@ -1,8 +1,9 @@
-import ShoppingLayout from "./layout/ShoppingLayout";
+import { lazy } from "react";
 
-import HomePage from "./HomePage";
-import ListingPage from "./ListingPage";
-import AccountPage from "./AccountPage";
-import CheckoutPage from "./CheckoutPage";
+const ShoppingLayout = lazy(() => import("./layout/ShoppingLayout"));
+const HomePage = lazy(() => import("./HomePage"));
+const AccountPage = lazy(() => import("./AccountPage"));
+const CheckoutPage = lazy(() => import("./CheckoutPage"));
+const ListingPage = lazy(() => import("./ListingPage"));
 
-export { ShoppingLayout, HomePage, ListingPage, AccountPage, CheckoutPage };
+export { ShoppingLayout, HomePage, AccountPage, CheckoutPage, ListingPage };

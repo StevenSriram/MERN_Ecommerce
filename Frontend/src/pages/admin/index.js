@@ -1,8 +1,9 @@
-import AdminLayout from "./layout/AdminLayout";
+import { lazy } from "react";
 
-import DashBoardPage from "./DashBoardPage";
-import ProductsPage from "./ProductsPage";
-import FeaturesPage from "./FeaturesPage";
-import OrdersPage from "./OrdersPage";
+const AdminLayout = lazy(() => import("./layout/AdminLayout"));
+const DashBoardPage = lazy(() => import("./DashBoardPage"));
+const OrdersPage = lazy(() => import("./OrdersPage"));
+const ProductsPage = lazy(() => import("./ProductsPage"));
+const FeaturesPage = lazy(() => import("./FeaturesPage"));
 
-export { AdminLayout, DashBoardPage, ProductsPage, FeaturesPage, OrdersPage };
+export { AdminLayout, DashBoardPage, OrdersPage, ProductsPage, FeaturesPage };
