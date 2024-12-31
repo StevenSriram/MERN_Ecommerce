@@ -18,6 +18,8 @@ import {
 
 import { NotFoundPage, UnAuthPage } from "./pages/others";
 
+import { Authorization } from "./components/custom";
+
 const App = () => {
   return (
     <main className="min-h-screen w-full grid place-items-center">
@@ -27,13 +29,27 @@ const App = () => {
 
       <Routes>
         {/* Authentication Routes */}
-        <Route path="/auth" element={<AuthLayout />}>
+        <Route
+          path="/auth"
+          element={
+            <Authorization>
+              <AuthLayout />
+            </Authorization>
+          }
+        >
           <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
         </Route>
 
         {/* Admin Routes */}
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route
+          path="/admin"
+          element={
+            <Authorization>
+              <AdminLayout />
+            </Authorization>
+          }
+        >
           <Route path="dashboard" element={<DashBoardPage />} />
           <Route path="orders" element={<OrdersPage />} />
           <Route path="products" element={<ProductsPage />} />
@@ -41,7 +57,14 @@ const App = () => {
         </Route>
 
         {/* Shopping Routes */}
-        <Route path="/shop" element={<ShoppingLayout />}>
+        <Route
+          path="/shop"
+          element={
+            <Authorization>
+              <ShoppingLayout />
+            </Authorization>
+          }
+        >
           <Route path="" element={<HomePage />} />
           <Route path="account" element={<AccountPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
