@@ -3,17 +3,30 @@ import { Link } from "react-router-dom";
 
 import { loginFormControls } from "../../utils/formControls";
 import { CommonForm } from "../../components/custom";
+import { useDispatch, useSelector } from "react-redux";
+import { useToast } from "../../hooks/use-toast";
+
+import { loginUser } from "../../store/slices/authSlice";
 
 function LoginPage() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const dispatch = useDispatch();
+
+  const { toast } = useToast();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    alert(`Email: ${formData.email}, Password: ${formData.password}`);
+    dispatch(loginUser(formData)).then((data) => {
+      if (data.payload?.success) {
+        toast({
+          title: data.payload?.message,
+        });
+      }
+    });
   };
 
   return (

@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { Loader } from "lucide-react";
+
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -10,9 +13,8 @@ import {
   SelectItem,
 } from "../ui/select";
 
-import { Loader } from "lucide-react";
-
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { clearError } from "../../store/slices/authSlice";
 
 const CommonForm = ({
   formControls,
@@ -22,6 +24,11 @@ const CommonForm = ({
   buttonText,
 }) => {
   const { isLoading, error } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, []);
 
   const renderComponent = (controlItem) => {
     const { componentType, ...inputProps } = controlItem;

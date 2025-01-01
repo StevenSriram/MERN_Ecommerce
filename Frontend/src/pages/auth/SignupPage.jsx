@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { registerFormControls } from "../../utils/formControls";
 import { CommonForm } from "../../components/custom";
 import { useDispatch } from "react-redux";
+import { useToast } from "../../hooks/use-toast";
 
 import { signupUser } from "../../store/slices/authSlice";
 
@@ -15,11 +16,17 @@ const SignupPage = () => {
   });
   const dispatch = useDispatch();
 
+  const { toast } = useToast();
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(signupUser(formData)).then(() => {
-      alert("Signup successful");
+    dispatch(signupUser(formData)).then((data) => {
+      if (data.payload?.success) {
+        toast({
+          title: data.payload?.message,
+        });
+      }
     });
   };
 
