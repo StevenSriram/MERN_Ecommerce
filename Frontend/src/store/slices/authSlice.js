@@ -8,6 +8,7 @@ const initialState = {
   isAuthenticated: false,
   isLoading: false,
   error: null,
+  isCheckingAuth: false,
 };
 
 const API_URL = "http://localhost:5000";
@@ -29,6 +30,18 @@ export const loginUser = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${API_URL}/api/auth/login`, formData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const checkAuthentication = createAsyncThunk(
+  "auth/check",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/auth/check-auth`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -80,6 +93,23 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload?.message;
+      });
+
+    // ? Check Authentication State
+    builder
+      .addCase(checkAuthentication.pending, (state) => {
+        state.isCheckingAuth = true;
+        state.error = null;
+      })
+      .addCase(checkAuthentication.fulfilled, (state, action) => {
+        state.isCheckingAuth = false;
+        state.user = action.payload?.success ? action.payload.user : null;
+        state.isAuthenticated = action.payload?.success;
+        state.error = null;
+      })
+      .addCase(checkAuthentication.rejected, (state, action) => {
+        state.isCheckingAuth = false;
         state.error = action.payload?.message;
       });
   },

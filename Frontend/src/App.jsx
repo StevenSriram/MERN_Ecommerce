@@ -1,5 +1,6 @@
-import { React, Suspense } from "react";
+import { React, Suspense, useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import { AuthLayout, LoginPage, SignupPage } from "./pages/auth";
 import {
@@ -17,23 +18,31 @@ import {
   ListingPage,
 } from "./pages/shop";
 import { NotFoundPage, UnAuthPage } from "./pages/others";
+import { Authorization, GifLoader } from "./components/custom";
 
-import { Authorization } from "./components/custom";
+import { checkAuthentication } from "./store/slices/authSlice";
 
 const App = () => {
+  const [isAppReady, setIsAppReady] = useState(false);
+
+  const dispatch = useDispatch();
+  const { isCheckingAuth } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(checkAuthentication()).finally(() => setIsAppReady(true));
+  }, [dispatch]);
+
+  if (!isAppReady || isCheckingAuth) {
+    return <GifLoader />;
+  }
+
   return (
     <main className="min-h-screen w-full grid place-items-center">
       <h1 className="text-4xl text-center font-extrabold tracking-tight">
         Welcome to MERN Ecommerce
       </h1>
 
-      <Suspense
-        fallback={
-          <div className="min-h-screen w-full grid place-items-center">
-            <img src="/lazyLoader.gif" />
-          </div>
-        }
-      >
+      <Suspense fallback={<GifLoader />}>
         <Routes>
           {/* Authentication Routes */}
           <Route

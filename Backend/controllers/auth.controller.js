@@ -25,8 +25,8 @@ export const signUp = async (req, res) => {
     // ! Save New User
     await user.save();
 
-    const token = generateJWT(res, user._id);
     user = { ...user._doc, password: undefined };
+    const token = generateJWT(res, user);
 
     return res.status(201).json({
       success: true,
@@ -63,8 +63,8 @@ export const login = async (req, res) => {
         .json({ success: false, message: "Invalid Credentials" });
     }
 
-    const token = generateJWT(res, user._id);
     user = { ...user._doc, password: undefined };
+    const token = generateJWT(res, user);
 
     return res.status(200).json({
       success: true,
@@ -75,4 +75,21 @@ export const login = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
+};
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("jwt");
+    return res
+      .status(200)
+      .json({ success: true, message: "Logout Successfully" });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const checkAuth = async (req, res) => {
+  const user = req.user;
+
+  res.status(200).json({ success: true, user, message: "User Authenticated" });
 };
