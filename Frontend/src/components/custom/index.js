@@ -6,4 +6,6 @@ const CommonForm = lazy(() => import("./CommonForm"));
 const SkeletonLoader = lazy(() => import("./SkeletonLoader"));
 const GifLoader = lazy(() => import("./GifLoader"));
 
-export { Authorization, CommonForm, SkeletonLoader, GifLoader };
+const ImageUploader = lazy(() => import("./ImageUploader"));
+
+export { Authorization, CommonForm, SkeletonLoader, GifLoader, ImageUploader };
