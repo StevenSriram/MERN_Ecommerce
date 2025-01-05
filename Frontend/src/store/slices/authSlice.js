@@ -4,8 +4,14 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 const initialState = {
-  user: null,
-  isAuthenticated: false,
+  // user: null,
+  // isAuthenticated: false,
+
+  // ! For Testing
+  user: { name: "Admin", role: "admin" },
+  isAuthenticated: true,
+  // ! For Testing
+
   isLoading: false,
   error: null,
   isCheckingAuth: false,

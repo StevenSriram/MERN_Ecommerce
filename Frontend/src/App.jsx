@@ -38,10 +38,6 @@ const App = () => {
 
   return (
     <main className="min-h-screen w-full grid place-items-center">
-      <h1 className="text-4xl text-center font-extrabold tracking-tight">
-        Welcome to MERN Ecommerce
-      </h1>
-
       <Suspense fallback={<GifLoader />}>
         <Routes>
           {/* Authentication Routes */}
