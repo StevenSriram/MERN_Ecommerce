@@ -1,41 +1,27 @@
 import React, { useEffect, useRef } from "react";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Label } from "../../../components/ui/label";
+import { Input } from "../../../components/ui/input";
 import { FileIcon, UploadCloud, XIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../../components/ui/button";
 
-const API_URL = "http://localhost:5000";
+import { uploadImage, clearImageURL } from "../../../store/slices/adminSlice";
 
-const ImageUploader = ({
-  imageFile,
-  setImageFile,
-  uploadedImageURL,
-  setUploadedImageURL,
-}) => {
+const AdminImageUploader = ({ imageFile, setImageFile }) => {
   const inputRef = useRef(null);
+  const dispatch = useDispatch();
+
+  const { isLoading, uploadedImageURL } = useSelector((state) => state.admin);
 
   const handleUploadImage = async () => {
     const formData = new FormData();
     formData.append("imageFile", imageFile);
 
-    const response = await axios.post(
-      `${API_URL}/api/admin/upload-image`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-
-    if (response.data.success) {
-      setUploadedImageURL(response.data.uploadResult.url);
-
-      console.log(response.data.uploadResult.url);
-    }
+    dispatch(uploadImage(formData));
   };
+
+  // ? console.log(uploadedImageURL);
 
   useEffect(() => {
     if (imageFile) {
@@ -52,7 +38,7 @@ const ImageUploader = ({
 
   const handleRemoveImage = (e) => {
     setImageFile(null);
-    setUploadedImageURL("");
+    dispatch(clearImageURL());
 
     inputRef.current.value = null;
   };
@@ -93,6 +79,8 @@ const ImageUploader = ({
             <UploadCloud className="w-12 h-12 text-muted-foreground mb-2" />
             <span>Drag & Drop or Upload Image</span>
           </Label>
+        ) : isLoading ? (
+          <UploadCloud className="animate-pulse mx-auto w-12 h-12 text-green-500 mt-3 mb-2" />
         ) : (
           <div className="flex items-center justify-between">
             <FileIcon className="w-8 text-primary mr-2 h-8" />
@@ -110,4 +98,4 @@ const ImageUploader = ({
   );
 };
 
-export default ImageUploader;
+export default AdminImageUploader;

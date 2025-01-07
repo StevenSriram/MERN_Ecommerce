@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { CommonForm, ImageUploader } from "@/components/custom";
+import { CommonForm } from "@/components/custom";
 import { addProductFormControls } from "@/utils/formControls";
 
+import AdminImageUploader from "./layout/AdminImageUploader";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -27,11 +28,12 @@ const ProductsPage = () => {
   const [formData, setFormData] = useState(initialFormData);
 
   const [imageFile, setImageFile] = useState(null);
-  const [uploadedImageURL, setUploadedImageURL] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  // ? console.log(formData);
 
   return (
     <>
@@ -46,11 +48,9 @@ const ProductsPage = () => {
             <SheetTitle>Add New Product</SheetTitle>
           </SheetHeader>
 
-          <ImageUploader
+          <AdminImageUploader
             imageFile={imageFile}
             setImageFile={setImageFile}
-            uploadedImageURL={uploadedImageURL}
-            setUploadedImageURL={setUploadedImageURL}
           />
 
           <div className="py-6">

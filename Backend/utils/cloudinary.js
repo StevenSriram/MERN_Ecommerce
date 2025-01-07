@@ -10,8 +10,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// console.log(process.env.CLOUDINARY_API_KEY);
-
 // * Uploading Image to Cloudinary
 const uploadCloudinary = async (file) => {
   const response = await cloudinary.uploader.upload(file, {
