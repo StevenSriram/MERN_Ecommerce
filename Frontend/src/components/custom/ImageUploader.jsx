@@ -1,8 +1,12 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import axios from "axios";
+
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { FileIcon, UploadCloud, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
+
+const API_URL = "http://localhost:5000";
 
 const ImageUploader = ({
   imageFile,
@@ -11,6 +15,33 @@ const ImageUploader = ({
   setUploadedImageURL,
 }) => {
   const inputRef = useRef(null);
+
+  const handleUploadImage = async () => {
+    const formData = new FormData();
+    formData.append("imageFile", imageFile);
+
+    const response = await axios.post(
+      `${API_URL}/api/admin/upload-image`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    if (response.data.success) {
+      setUploadedImageURL(response.data.uploadResult.url);
+
+      console.log(response.data.uploadResult.url);
+    }
+  };
+
+  useEffect(() => {
+    if (imageFile) {
+      handleUploadImage();
+    }
+  }, [imageFile]);
 
   const handleImageChange = (e) => {
     if (e.target.files?.[0]) {

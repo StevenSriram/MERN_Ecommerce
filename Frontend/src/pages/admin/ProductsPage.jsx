@@ -10,9 +10,21 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
+const initialFormData = {
+  image: null,
+  title: "",
+  description: "",
+  category: "",
+  brand: "",
+  price: "",
+  salePrice: "",
+  totalStock: "",
+  averageReview: 0,
+};
+
 const ProductsPage = () => {
   const [openAddProduct, setOpenAddProduct] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState(initialFormData);
 
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImageURL, setUploadedImageURL] = useState("");
