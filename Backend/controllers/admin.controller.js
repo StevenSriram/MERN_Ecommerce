@@ -1,6 +1,7 @@
 import { uploadCloudinary } from "../utils/cloudinary.js";
+import memoryCache from "../utils/nodeCache.js";
 
-import Product from "../modals/Product.modal.js";
+import Product from "../modals/product.modal.js";
 
 export const uploadImage = async (req, res) => {
   try {
@@ -32,6 +33,9 @@ export const addProduct = async (req, res) => {
     // ! Add New Product
     await product.save();
 
+    // ! Delete Product Cache
+    memoryCache.del("products");
+
     res
       .status(200)
       .json({ success: true, message: "Product Added Successfully", product });
@@ -42,7 +46,20 @@ export const addProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
+    // ! check Product Cache Found
+    if (memoryCache.has("products")) {
+      const productCache = memoryCache.get("products");
+
+      return res.status(200).json({
+        success: true,
+        allProducts: productCache,
+      });
+    }
+
     const allProducts = await Product.find({});
+
+    // ! Set Product Cache
+    memoryCache.set("products", allProducts);
 
     res.status(200).json({ success: true, allProducts });
   } catch (error) {
@@ -78,6 +95,9 @@ export const editProduct = async (req, res) => {
         .json({ success: false, message: "Product Not Found" });
     }
 
+    // ! Delete Product Cache
+    memoryCache.del("products");
+
     res.status(200).json({
       success: true,
       message: "Product Updated Successfully",
@@ -100,6 +120,9 @@ export const deleteProduct = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Product Not Found" });
     }
+
+    // ! Delete Product Cache
+    memoryCache.del("products");
 
     res
       .status(200)
