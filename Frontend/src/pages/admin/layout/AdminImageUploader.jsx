@@ -3,16 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
-import { FileIcon, UploadCloud, XIcon } from "lucide-react";
+import { CloudSnow, FileIcon, UploadCloud, XIcon } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 
 import { uploadImage, clearImageURL } from "../../../store/slices/adminSlice";
 
-const AdminImageUploader = ({ imageFile, setImageFile }) => {
+const AdminImageUploader = ({ imageFile, setImageFile, editMode }) => {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
 
-  const { isLoading, uploadedImageURL } = useSelector((state) => state.admin);
+  const { imageLoading, uploadedImageURL } = useSelector(
+    (state) => state.admin
+  );
 
   const handleUploadImage = async () => {
     const formData = new FormData();
@@ -61,7 +63,9 @@ const AdminImageUploader = ({ imageFile, setImageFile }) => {
       <div
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        className="p-2 border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:bg-slate-100 transition duration-100 ease-in-out"
+        className={`${
+          editMode ? "cursor-not-allowed" : "cursor-pointer"
+        } w-full p-2 border-2 border-dashed border-slate-200 rounded-lg hover:bg-slate-100 transition duration-100 ease-in-out`}
       >
         <Input
           className="hidden"
@@ -72,14 +76,18 @@ const AdminImageUploader = ({ imageFile, setImageFile }) => {
         />
 
         {!imageFile ? (
-          <Label
-            htmlFor="image"
-            className="flex flex-col items-center justify-center w-full h-32"
-          >
-            <UploadCloud className="w-12 h-12 text-muted-foreground mb-2" />
-            <span>Drag & Drop or Upload Image</span>
-          </Label>
-        ) : isLoading ? (
+          editMode ? (
+            <CloudSnow className="animate-pulse mx-auto w-12 h-12 text-red-500 mt-3 mb-2" />
+          ) : (
+            <Label
+              htmlFor="image"
+              className="flex flex-col items-center justify-center w-full h-32"
+            >
+              <UploadCloud className="w-12 h-12 text-muted-foreground mb-2" />
+              <span>Drag & Drop or Upload Image</span>
+            </Label>
+          )
+        ) : imageLoading ? (
           <UploadCloud className="animate-pulse mx-auto w-12 h-12 text-green-500 mt-3 mb-2" />
         ) : (
           <div className="flex items-center justify-between">

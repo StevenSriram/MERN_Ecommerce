@@ -48,6 +48,7 @@ const CommonForm = ({
       case "select":
         return (
           <Select
+            value={formData[inputProps.name]}
             onValueChange={(value) =>
               setFormData({ ...formData, [inputProps.name]: value })
             }
@@ -95,7 +96,7 @@ const CommonForm = ({
         </p>
       )}
 
-      <Button type="submit" disabled={isLoading} className="mt-4 w-full">
+      <Button type="submit" disabled={isLoading} className="mt-8 w-full">
         {isLoading ? <Loader className="w-6 h-6 animate-spin" /> : buttonText}
       </Button>
     </form>

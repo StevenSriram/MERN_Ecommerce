@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { CommonForm } from "@/components/custom";
+import { useEffect, useState } from "react";
+import { CommonForm, SkeletonLoader } from "@/components/custom";
 import { addProductFormControls } from "@/utils/formControls";
 
 import AdminImageUploader from "./layout/AdminImageUploader";
+import AdminProductTile from "./layout/AdminProductTile";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -10,6 +11,13 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addProduct,
+  clearImageURL,
+  getProducts,
+} from "@/store/slices/adminSlice";
+import { toast } from "@/hooks/use-toast";
 
 const initialFormData = {
   image: null,
@@ -20,17 +28,47 @@ const initialFormData = {
   price: "",
   salePrice: "",
   totalStock: "",
-  averageReview: 0,
 };
 
 const ProductsPage = () => {
+  const [productReady, setProductReady] = useState(false);
+
+  const [editID, setEditID] = useState(null);
   const [openAddProduct, setOpenAddProduct] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
 
   const [imageFile, setImageFile] = useState(null);
 
+  const dispatch = useDispatch();
+  const { isLoading, uploadedImageURL, productsList } = useSelector(
+    (state) => state.admin
+  );
+
+  useEffect(() => {
+    dispatch(getProducts()).finally(() => setProductReady(true));
+  }, [dispatch]);
+
+  if (isLoading || !productReady) return <SkeletonLoader />;
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    dispatch(addProduct({ ...formData, image: uploadedImageURL })).then(
+      (data) => {
+        if (data.payload?.success) {
+          toast({
+            title: data.payload?.message,
+          });
+
+          dispatch(getProducts()).finally(() => setProductReady(true));
+
+          setOpenAddProduct(false);
+          setFormData(initialFormData);
+          setImageFile(null);
+          dispatch(clearImageURL());
+        }
+      }
+    );
   };
 
   // ? console.log(formData);
@@ -38,19 +76,44 @@ const ProductsPage = () => {
   return (
     <>
       <div className="mb-5 w-full flex justify-end">
-        <Button className="ml-3" onClick={() => setOpenAddProduct(true)}>
+        <Button
+          className="ml-3"
+          onClick={() => {
+            setOpenAddProduct(true);
+
+            setFormData(initialFormData);
+            setImageFile(null);
+            dispatch(clearImageURL());
+          }}
+        >
           Add Product
         </Button>
       </div>
+
+      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {productsList?.map((product) => (
+          <AdminProductTile
+            key={product._id}
+            product={product}
+            setFormData={setFormData}
+            setOpenAddProduct={setOpenAddProduct}
+            setEditID={setEditID}
+          />
+        ))}
+      </div>
+
       <Sheet open={openAddProduct} onOpenChange={setOpenAddProduct}>
         <SheetContent side="right" className="overflow-auto">
           <SheetHeader className="border-b pt-0 pb-2">
-            <SheetTitle>Add New Product</SheetTitle>
+            <SheetTitle>
+              {editID ? "Edit Product" : "Add New Product"}
+            </SheetTitle>
           </SheetHeader>
 
           <AdminImageUploader
             imageFile={imageFile}
             setImageFile={setImageFile}
+            editMode={editID ? formData.image : null}
           />
 
           <div className="py-6">
@@ -59,7 +122,7 @@ const ProductsPage = () => {
               formData={formData}
               setFormData={setFormData}
               handleSubmit={handleSubmit}
-              buttonText={"Add"}
+              buttonText={editID ? "Edit" : "Add"}
             />
           </div>
         </SheetContent>

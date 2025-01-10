@@ -7,6 +7,7 @@ const initialState = {
   isLoading: false,
   error: null,
 
+  imageLoading: false,
   uploadedImageURL: null,
 
   // ? List of all products
@@ -103,16 +104,16 @@ const adminSlice = createSlice({
     // ? Upload Image State
     builder
       .addCase(uploadImage.pending, (state) => {
-        state.isLoading = true;
+        state.imageLoading = true;
         state.error = null;
       })
       .addCase(uploadImage.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.imageLoading = false;
         state.uploadedImageURL = action.payload?.uploadResult.url;
         state.error = null;
       })
       .addCase(uploadImage.rejected, (state, action) => {
-        state.isLoading = false;
+        state.imageLoading = false;
         state.error = action.payload.message;
       });
 
