@@ -13,7 +13,16 @@ cloudinary.config({
 // * Uploading Image to Cloudinary
 const uploadCloudinary = async (file) => {
   const response = await cloudinary.uploader.upload(file, {
-    resource_type: "auto",
+    resource_type: "image",
+  });
+
+  return response;
+};
+
+const deleteCloudinary = async (publicID) => {
+  const response = await cloudinary.uploader.destroy(publicID, {
+    type: "upload",
+    resource_type: "image",
   });
 
   return response;
@@ -21,4 +30,4 @@ const uploadCloudinary = async (file) => {
 
 const upload = multer({ storage });
 
-export { upload, uploadCloudinary };
+export { upload, uploadCloudinary, deleteCloudinary };

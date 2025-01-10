@@ -36,6 +36,20 @@ export const uploadImage = createAsyncThunk(
   }
 );
 
+export const deleteImage = createAsyncThunk(
+  "admin/deleteImage",
+  async (publicID, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `${API_URL}/api/admin/delete-image/${publicID}`
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const addProduct = createAsyncThunk(
   "admin/addProduct",
   async (formData, { rejectWithValue }) => {
@@ -63,12 +77,13 @@ export const getProducts = createAsyncThunk(
   }
 );
 
-export const deleteProduct = createAsyncThunk(
-  "admin/deleteProduct",
-  async (productId, { rejectWithValue }) => {
+export const editProduct = createAsyncThunk(
+  "admin/editProduct",
+  async ({ productId, formData }, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(
-        `${API_URL}/api/admin/delete-product/${productId}`
+      const response = await axios.put(
+        `${API_URL}/api/admin/edit-product/${productId}`,
+        formData
       );
       return response.data;
     } catch (error) {
@@ -77,13 +92,12 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
-export const editProduct = createAsyncThunk(
-  "admin/editProduct",
-  async (formData, { rejectWithValue }) => {
+export const deleteProduct = createAsyncThunk(
+  "admin/deleteProduct",
+  async (productId, { rejectWithValue }) => {
     try {
-      const response = await axios.put(
-        `${API_URL}/api/admin/edit-product`,
-        formData
+      const response = await axios.delete(
+        `${API_URL}/api/admin/delete-product/${productId}`
       );
       return response.data;
     } catch (error) {
@@ -114,7 +128,22 @@ const adminSlice = createSlice({
       })
       .addCase(uploadImage.rejected, (state, action) => {
         state.imageLoading = false;
-        state.error = action.payload.message;
+        state.error = action.payload?.message;
+      });
+
+    // ? Delete Image State
+    builder
+      .addCase(deleteImage.pending, (state) => {
+        state.imageLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteImage.fulfilled, (state, action) => {
+        state.imageLoading = false;
+        state.error = null;
+      })
+      .addCase(deleteImage.rejected, (state, action) => {
+        state.imageLoading = false;
+        state.error = action.payload?.message;
       });
 
     // ? Add Product State
@@ -129,7 +158,7 @@ const adminSlice = createSlice({
       })
       .addCase(addProduct.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload.message;
+        state.error = action.payload?.message;
       });
 
     // ? Get Products State
@@ -147,7 +176,7 @@ const adminSlice = createSlice({
       })
       .addCase(getProducts.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload.message;
+        state.error = action.payload?.message;
       });
 
     // ? Delete Product State
@@ -162,7 +191,7 @@ const adminSlice = createSlice({
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload.message;
+        state.error = action.payload?.message;
       });
 
     // ? Edit Product State
@@ -177,7 +206,7 @@ const adminSlice = createSlice({
       })
       .addCase(editProduct.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload.message;
+        state.error = action.payload?.message;
       });
   },
 });

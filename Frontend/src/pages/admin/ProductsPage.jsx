@@ -14,6 +14,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import {
   addProduct,
+  editProduct,
   clearImageURL,
   getProducts,
 } from "@/store/slices/adminSlice";
@@ -53,22 +54,26 @@ const ProductsPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(addProduct({ ...formData, image: uploadedImageURL })).then(
-      (data) => {
-        if (data.payload?.success) {
-          toast({
-            title: data.payload?.message,
-          });
+    (editID
+      ? dispatch(editProduct({ productId: editID, formData }))
+      : dispatch(addProduct({ ...formData, image: uploadedImageURL }))
+    ).then((data) => {
+      if (data.payload?.success) {
+        toast({
+          title: data.payload?.message,
+        });
 
-          dispatch(getProducts()).finally(() => setProductReady(true));
+        dispatch(getProducts()).finally(() => {
+          setProductReady(true);
+          setEditID(null);
+        });
 
-          setOpenAddProduct(false);
-          setFormData(initialFormData);
-          setImageFile(null);
-          dispatch(clearImageURL());
-        }
+        setOpenAddProduct(false);
+        setFormData(initialFormData);
+        setImageFile(null);
+        dispatch(clearImageURL());
       }
-    );
+    });
   };
 
   // ? console.log(formData);
@@ -84,6 +89,7 @@ const ProductsPage = () => {
             setFormData(initialFormData);
             setImageFile(null);
             dispatch(clearImageURL());
+            setEditID(null);
           }}
         >
           Add Product
@@ -113,7 +119,7 @@ const ProductsPage = () => {
           <AdminImageUploader
             imageFile={imageFile}
             setImageFile={setImageFile}
-            editMode={editID ? formData.image : null}
+            editMode={editID !== null}
           />
 
           <div className="py-6">

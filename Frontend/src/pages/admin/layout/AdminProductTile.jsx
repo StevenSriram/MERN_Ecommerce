@@ -1,31 +1,54 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
+import { useDispatch } from "react-redux";
+import {
+  deleteProduct,
+  deleteImage,
+  getProducts,
+} from "@/store/slices/adminSlice";
+import { useToast } from "@/hooks/use-toast";
+
 const AdminProductTile = ({
   product,
   setFormData,
   setOpenAddProduct,
   setEditID,
 }) => {
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+
   const handleEdit = () => {
     setOpenAddProduct(true);
     setEditID(product?._id);
 
-    // setFormData({
-    //   image: null,
-    //   title: product?.title,
-    //   description: product?.description,
-    //   category: product?.category,
-    //   brand: product?.brand,
-    //   price: product?.price,
-    //   salePrice: product?.salePrice,
-    //   totalStock: product?.totalStock,
-    // });
-
-    setFormData(product);
+    setFormData({
+      image: product?.image,
+      title: product?.title,
+      description: product?.description,
+      category: product?.category,
+      brand: product?.brand,
+      price: product?.price,
+      salePrice: product?.salePrice,
+      totalStock: product?.totalStock,
+    });
   };
 
-  const handleDelete = () => {};
+  const handleDelete = (productId, productImage) => {
+    const publicId = productImage.split("/").pop().split(".")[0];
+
+    dispatch(deleteProduct(productId)).then((data) => {
+      if (data.payload?.success) {
+        dispatch(deleteImage(publicId));
+
+        toast({
+          title: data.payload?.message,
+        });
+
+        dispatch(getProducts());
+      }
+    });
+  };
 
   return (
     <Card className="w-full max-w-sm mx-auto hover:border-slate-400 hover:shadow-lg hover:scale-95 transition duration-150">
@@ -54,7 +77,10 @@ const AdminProductTile = ({
         </CardContent>
         <CardFooter className="flex justify-between items-center">
           <Button onClick={handleEdit}>Edit</Button>
-          <Button variant="destructive" onClick={handleDelete}>
+          <Button
+            variant="destructive"
+            onClick={() => handleDelete(product?._id, product?.image)}
+          >
             Delete
           </Button>
         </CardFooter>

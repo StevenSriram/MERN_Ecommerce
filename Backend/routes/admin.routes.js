@@ -4,6 +4,7 @@ import { upload } from "../utils/cloudinary.js";
 
 import {
   uploadImage,
+  deleteImage,
   addProduct,
   getProducts,
   editProduct,
@@ -13,6 +14,7 @@ import {
 const router = express.Router();
 
 router.post("/upload-image", upload.single("imageFile"), uploadImage);
+router.delete("/delete-image/:id", deleteImage);
 
 router.get("/products", getProducts);
 

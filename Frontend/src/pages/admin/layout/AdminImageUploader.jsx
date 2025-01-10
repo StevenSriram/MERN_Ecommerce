@@ -6,7 +6,11 @@ import { Input } from "../../../components/ui/input";
 import { CloudSnow, FileIcon, UploadCloud, XIcon } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 
-import { uploadImage, clearImageURL } from "../../../store/slices/adminSlice";
+import {
+  uploadImage,
+  deleteImage,
+  clearImageURL,
+} from "../../../store/slices/adminSlice";
 
 const AdminImageUploader = ({ imageFile, setImageFile, editMode }) => {
   const inputRef = useRef(null);
@@ -23,10 +27,15 @@ const AdminImageUploader = ({ imageFile, setImageFile, editMode }) => {
     dispatch(uploadImage(formData));
   };
 
+  /*
+    PublicId :  id2sd8p3wqken5y9ufqg
+  http://res.cloudinary.com/dv0w9co1u/image/upload/v1736531914/id2sd8p3wqken5y9ufqg.png
+  */
+
   // ? console.log(uploadedImageURL);
 
   useEffect(() => {
-    if (imageFile) {
+    if (imageFile && !uploadedImageURL) {
       handleUploadImage();
     }
   }, [imageFile]);
@@ -41,6 +50,10 @@ const AdminImageUploader = ({ imageFile, setImageFile, editMode }) => {
   const handleRemoveImage = (e) => {
     setImageFile(null);
     dispatch(clearImageURL());
+
+    // ! Remove Image From Cloudinary
+    const publicId = uploadedImageURL.split("/").pop().split(".")[0];
+    dispatch(deleteImage(publicId));
 
     inputRef.current.value = null;
   };
