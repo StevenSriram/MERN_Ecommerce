@@ -33,7 +33,7 @@ const CommonForm = ({
   // ! Memoizing function to Avoid recreation on each render
   const renderComponent = useCallback(
     (controlItem) => {
-      const { componentType, ...inputProps } = controlItem;
+      const { focus, componentType, ...inputProps } = controlItem;
 
       switch (componentType) {
         case "textarea":
@@ -77,6 +77,7 @@ const CommonForm = ({
               onChange={(e) =>
                 setFormData({ ...formData, [inputProps.name]: e.target.value })
               }
+              autoFocus={focus}
             />
           );
       }

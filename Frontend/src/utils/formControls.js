@@ -5,6 +5,7 @@ export const registerFormControls = [
     placeholder: "Enter user name",
     componentType: "input",
     type: "text",
+    focus: true,
   },
   {
     name: "email",
@@ -29,6 +30,7 @@ export const loginFormControls = [
     placeholder: "Enter email",
     componentType: "input",
     type: "email",
+    focus: true,
   },
   {
     name: "password",

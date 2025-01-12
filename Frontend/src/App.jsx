@@ -37,7 +37,7 @@ const App = () => {
   }
 
   return (
-    <main className="min-h-screen w-full grid place-items-center">
+    <main className="min-h-screen w-full">
       <Suspense fallback={<GifLoader />}>
         <Routes>
           {/* Authentication Routes */}
