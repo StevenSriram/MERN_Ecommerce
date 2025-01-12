@@ -11,8 +11,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import ShoppingMenuItems from "./ShoppingMenuItems";
-import ShoppingMenuContents from "./ShoppingMenuContents";
+import { ShoppingMenuContents, ShoppingMenuItems } from "./ShoppingMenuItems";
 
 const ShoppingHeader = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
