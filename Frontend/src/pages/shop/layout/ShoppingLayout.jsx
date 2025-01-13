@@ -3,7 +3,7 @@ import ShoppingHeader from "./ShoppingHeader";
 
 function ShoppingLayout() {
   return (
-    <div className="flex flex-col bg-white overflow-hidden">
+    <div className="flex flex-col bg-white min-h-screen overflow-hidden">
       {/* common header */}
       <ShoppingHeader />
 

@@ -15,9 +15,16 @@ const API_URL = "http://localhost:5000";
 
 export const getFilteredProducts = createAsyncThunk(
   "shop/getFilteredProducts",
-  async (_, { rejectWithValue }) => {
+  async ({ filterParams, sortParams }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/api/shop/products`);
+      const queryParams = new URLSearchParams({
+        ...filterParams,
+        sortBy: sortParams,
+      });
+
+      const response = await axios.get(
+        `${API_URL}/api/shop/products?${queryParams}`
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

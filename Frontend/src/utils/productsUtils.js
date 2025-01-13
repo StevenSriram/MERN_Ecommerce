@@ -17,6 +17,7 @@ export const filterOptions = {
 };
 
 export const sortOptions = [
+  { id: "newest", label: "New Arrivals" },
   { id: "price-lowtohigh", label: "Price: Low to High" },
   { id: "price-hightolow", label: "Price: High to Low" },
   { id: "title-atoz", label: "Title: A to Z" },

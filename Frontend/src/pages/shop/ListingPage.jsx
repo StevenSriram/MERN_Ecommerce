@@ -17,22 +17,49 @@ import { Button } from "@/components/ui/button";
 import { ProductLoader } from "@/components/custom";
 
 import { ArrowUpDownIcon } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+
+const getQueryParams = (filters) => {
+  const queryParams = [];
+
+  for (const [key, value] of Object.entries(filters)) {
+    if (Array.isArray(value) && value.length > 0) {
+      const paramValue = value?.join(",");
+      queryParams.push(`${key}=${encodeURIComponent(paramValue)}`);
+    }
+  }
+
+  return queryParams.join("&");
+};
 
 const ListingPage = () => {
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams("");
 
   const dispatch = useDispatch();
   const { isLoading, productsList } = useSelector((state) => state.shop);
 
+  // ? Retrieving filters from session storage
   useEffect(() => {
-    dispatch(getFilteredProducts());
-  }, [dispatch]);
-
-  useEffect(() => {
-    setSort("price-lowtohigh");
+    setSort("newest");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
-  }, []);
+  }, [searchParams]);
+
+  // ? Updating query params
+  useEffect(() => {
+    const queryString = getQueryParams(filters);
+    setSearchParams(new URLSearchParams(queryString));
+  }, [filters]);
+
+  // ? get filtered products
+  useEffect(() => {
+    if (filters && Object.keys(filters).length > 0 && sort) {
+      dispatch(
+        getFilteredProducts({ filterParams: filters, sortParams: sort })
+      );
+    }
+  }, [dispatch, filters, sort]);
 
   const handleSort = (value) => {
     setSort(value);
@@ -59,12 +86,12 @@ const ListingPage = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-2 md:p-4">
+    <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-2 md:py-1">
       <ShoppingFilter filters={filters} handleFilter={handleFilter} />
 
       <div
-        className="bg-background w-full rounded-lg shadow-sm overflow-y-auto"
-        style={{ maxHeight: "calc(100vh - 97px)" }}
+        className="bg-background w-full rounded-lg shadow-sm 
+      overflow-y-auto md:max-h-[87vh] max-md:max-h-[55vh]"
       >
         <div className="p-4 border-b flex items-center justify-between">
           <h2 className="text-lg font-extrabold">All Products</h2>
@@ -89,6 +116,10 @@ const ListingPage = () => {
                     <DropdownMenuRadioItem
                       key={sortItem.id}
                       value={sortItem.id}
+                      className={`${
+                        sortItem.label === "New Arrivals" &&
+                        "text-green-500 leading-normal font-semibold"
+                      }`}
                     >
                       {sortItem.label}
                     </DropdownMenuRadioItem>
