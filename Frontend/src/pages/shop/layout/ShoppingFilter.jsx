@@ -4,7 +4,7 @@ import { filterOptions } from "@/utils/productsUtils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
-const ShoppingFilter = () => {
+const ShoppingFilter = ({ filters, handleFilter }) => {
   return (
     <div className="bg-white p-3 rounded-lg shadow-sm border-r">
       <div className="p-4 border-b">
@@ -22,7 +22,10 @@ const ShoppingFilter = () => {
                     key={option.id}
                     className="flex font-medium items-center gap-2 "
                   >
-                    <Checkbox />
+                    <Checkbox
+                      checked={filters[keyItem]?.includes(option.id)}
+                      onCheckedChange={() => handleFilter(keyItem, option.id)}
+                    />
                     {option.label}
                   </Label>
                 ))}

@@ -9,6 +9,7 @@ import config from "../env.config.js";
 import connectDB from "./db/configDB.js";
 import authRoutes from "./routes/auth.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
+import shopRoutes from "./routes/shop.routes.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -31,6 +32,8 @@ app.use(morgan("dev"));
 app.use("/api/auth", authRoutes);
 // ? Admin Routes
 app.use("/api/admin", adminRoutes);
+// ? Shop Routes
+app.use("/api/shop", shopRoutes);
 
 // * Testing Route
 app.get("/", (req, res) => {
