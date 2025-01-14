@@ -14,6 +14,7 @@ cloudinary.config({
 const uploadCloudinary = async (file) => {
   const response = await cloudinary.uploader.upload(file, {
     resource_type: "image",
+    folder: "products",
   });
 
   return response;

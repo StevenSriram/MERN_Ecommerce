@@ -29,7 +29,7 @@ export const sortData = (sortBy) => {
       sort.title = -1;
       break;
     default:
-      sort.createdAt = 1;
+      sort.arrival = -1;
   }
 
   return sort;

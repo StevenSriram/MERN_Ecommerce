@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ShoppingFilter from "./layout/ShoppingFilter";
 import { sortOptions } from "@/utils/productsUtils";
 import ShoppingProductTile from "./layout/ShoppingProductTile";
-import { getFilteredProducts } from "@/store/slices/shopSlice";
+import { getFilteredProducts, resetPage } from "@/store/slices/shopSlice";
 
 import {
   DropdownMenu,
@@ -18,8 +18,9 @@ import { ProductLoader } from "@/components/custom";
 
 import { ArrowUpDownIcon } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
+import ShoppingPagination from "./layout/ShoppingPagination";
 
-const getQueryParams = (filters) => {
+const getQueryParams = (filters, page, limit) => {
   const queryParams = [];
 
   for (const [key, value] of Object.entries(filters)) {
@@ -27,6 +28,10 @@ const getQueryParams = (filters) => {
       const paramValue = value?.join(",");
       queryParams.push(`${key}=${encodeURIComponent(paramValue)}`);
     }
+  }
+  if (page > 1) {
+    queryParams.push(`page=${page}`);
+    queryParams.push(`limit=${limit}`);
   }
 
   return queryParams.join("&");
@@ -38,28 +43,37 @@ const ListingPage = () => {
   const [searchParams, setSearchParams] = useSearchParams("");
 
   const dispatch = useDispatch();
-  const { isLoading, productsList } = useSelector((state) => state.shop);
+  const { isLoading, productsList, totalProducts, page, limit } = useSelector(
+    (state) => state.shop
+  );
 
   // ? Retrieving filters from session storage
   useEffect(() => {
+    // ! Reset page when Filters changed
+    dispatch(resetPage());
     setSort("newest");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
   }, [searchParams]);
 
   // ? Updating query params
   useEffect(() => {
-    const queryString = getQueryParams(filters);
+    const queryString = getQueryParams(filters, page, limit);
     setSearchParams(new URLSearchParams(queryString));
   }, [filters]);
 
   // ? get filtered products
   useEffect(() => {
-    if (filters && Object.keys(filters).length > 0 && sort) {
+    if (Object.keys(filters).length > 0 || sort) {
       dispatch(
-        getFilteredProducts({ filterParams: filters, sortParams: sort })
+        getFilteredProducts({
+          filterParams: filters,
+          sortParams: sort,
+          pageParams: page,
+          limitParams: limit,
+        })
       );
     }
-  }, [dispatch, filters, sort]);
+  }, [dispatch, filters, sort, page, limit]);
 
   const handleSort = (value) => {
     setSort(value);
@@ -90,14 +104,14 @@ const ListingPage = () => {
       <ShoppingFilter filters={filters} handleFilter={handleFilter} />
 
       <div
-        className="bg-background w-full rounded-lg shadow-sm 
+        className="relative bg-background w-full rounded-lg shadow-sm 
       overflow-y-auto md:max-h-[87vh] max-md:max-h-[55vh]"
       >
         <div className="p-4 border-b flex items-center justify-between">
           <h2 className="text-lg font-extrabold">All Products</h2>
           <div className="flex items-center gap-3">
             <span className="text-muted-foreground">
-              {productsList.length} Products
+              {productsList.length} Out of {totalProducts}
             </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -129,7 +143,7 @@ const ListingPage = () => {
             </DropdownMenu>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
           {isLoading
             ? Array.from({ length: 8 }).map((_, index) => (
                 <ProductLoader key={index} />
@@ -138,6 +152,7 @@ const ListingPage = () => {
                 <ShoppingProductTile key={product?._id} product={product} />
               ))}
         </div>
+        <ShoppingPagination />
       </div>
     </div>
   );

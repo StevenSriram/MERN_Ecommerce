@@ -9,17 +9,25 @@ const initialState = {
 
   // ? List of all products
   productsList: [],
+  page: 1,
+  limit: 8,
+  totalProducts: 0,
 };
 
 const API_URL = "http://localhost:5000";
 
 export const getFilteredProducts = createAsyncThunk(
   "shop/getFilteredProducts",
-  async ({ filterParams, sortParams }, { rejectWithValue }) => {
+  async (
+    { filterParams, sortParams, pageParams, limitParams },
+    { rejectWithValue }
+  ) => {
     try {
       const queryParams = new URLSearchParams({
         ...filterParams,
         sortBy: sortParams,
+        page: pageParams,
+        limit: limitParams,
       });
 
       const response = await axios.get(
@@ -35,7 +43,16 @@ export const getFilteredProducts = createAsyncThunk(
 const shopSlice = createSlice({
   name: "shop",
   initialState,
-  reducers: {},
+  reducers: {
+    // ? Pagination
+    resetPage: (state) => {
+      state.page = 1;
+    },
+
+    setPage: (state, action) => {
+      state.page = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     // ? Get Products State
     builder
@@ -48,6 +65,9 @@ const shopSlice = createSlice({
         state.productsList = action.payload?.success
           ? action.payload?.allProducts
           : [];
+        state.totalProducts = action.payload?.success
+          ? action.payload?.totalProducts
+          : 0;
         state.error = null;
       })
       .addCase(getFilteredProducts.rejected, (state, action) => {
@@ -56,5 +76,7 @@ const shopSlice = createSlice({
       });
   },
 });
+
+export const { resetPage, setPage } = shopSlice.actions;
 
 export default shopSlice.reducer;

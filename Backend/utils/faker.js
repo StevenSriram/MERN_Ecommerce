@@ -1,6 +1,12 @@
 import { faker } from "@faker-js/faker";
 
 function createRandomProduct() {
+  /*
+    const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    category: random(["men", "women", "kids", "accessories", "footwear"]),
+    brand: random(["nike", "adidas", "puma", "levi", "zara", "h&m"]),
+  */
+
   return {
     image: faker.image.url(),
     title: faker.commerce.product(),
@@ -10,10 +16,11 @@ function createRandomProduct() {
     price: faker.commerce.price(10, 100, 2),
     salePrice: faker.commerce.price(5, 90, 2),
     totalStock: faker.number.int({ min: 10, max: 100 }),
+    arrival: faker.date.past(),
   };
 }
 
-async function insertRandomProducts() {
+function insertRandomProducts() {
   try {
     const products = faker.helpers.multiple(createRandomProduct, {
       count: 10,
