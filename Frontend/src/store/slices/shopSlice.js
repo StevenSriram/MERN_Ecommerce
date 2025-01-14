@@ -12,6 +12,9 @@ const initialState = {
   page: 1,
   limit: 8,
   totalProducts: 0,
+
+  // single Product Detail
+  productDetails: {},
 };
 
 const API_URL = "http://localhost:5000";
@@ -48,9 +51,17 @@ const shopSlice = createSlice({
     resetPage: (state) => {
       state.page = 1;
     },
-
     setPage: (state, action) => {
       state.page = action.payload;
+    },
+
+    // ? get ProductDetails
+    getProductDetails: (state, action) => {
+      const productId = action.payload;
+
+      state.productDetails = state.productsList.find(
+        (product) => product._id === productId
+      );
     },
   },
   extraReducers: (builder) => {
@@ -77,6 +88,6 @@ const shopSlice = createSlice({
   },
 });
 
-export const { resetPage, setPage } = shopSlice.actions;
+export const { resetPage, setPage, getProductDetails } = shopSlice.actions;
 
 export default shopSlice.reducer;

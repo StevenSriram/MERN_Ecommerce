@@ -1,7 +1,7 @@
 import Product from "../modals/product.modal.js";
 import { filterData, sortData } from "../utils/filter_sort.js";
 
-import memoryCache, { generateCacheKey } from "./../utils/nodeCache.js";
+import memoryCache, { generateCacheKey } from "../utils/nodeCache.js";
 
 export const getProducts = async (req, res) => {
   try {

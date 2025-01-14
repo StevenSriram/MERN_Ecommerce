@@ -4,7 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import ShoppingFilter from "./layout/ShoppingFilter";
 import { sortOptions } from "@/utils/productsUtils";
 import ShoppingProductTile from "./layout/ShoppingProductTile";
-import { getFilteredProducts, resetPage } from "@/store/slices/shopSlice";
+import {
+  getFilteredProducts,
+  getProductDetails,
+  resetPage,
+} from "@/store/slices/shopSlice";
 
 import {
   DropdownMenu,
@@ -19,6 +23,7 @@ import { ProductLoader } from "@/components/custom";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import ShoppingPagination from "./layout/ShoppingPagination";
+import ShoppingDetails from "./layout/ShoppingDetails";
 
 const getQueryParams = (filters, page, limit) => {
   const queryParams = [];
@@ -41,6 +46,8 @@ const ListingPage = () => {
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState("");
   const [searchParams, setSearchParams] = useSearchParams("");
+
+  const [openDetails, setOpenDetails] = useState(false);
 
   const dispatch = useDispatch();
   const { isLoading, productsList, totalProducts, page, limit } = useSelector(
@@ -75,6 +82,11 @@ const ListingPage = () => {
     }
   }, [dispatch, filters, sort, page, limit]);
 
+  const handleProductDetails = (productId) => {
+    dispatch(getProductDetails(productId));
+    if (!openDetails) setOpenDetails(true);
+  };
+
   const handleSort = (value) => {
     setSort(value);
   };
@@ -102,6 +114,11 @@ const ListingPage = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-2 md:py-1">
       <ShoppingFilter filters={filters} handleFilter={handleFilter} />
+
+      <ShoppingDetails
+        openDetails={openDetails}
+        setOpenDetails={setOpenDetails}
+      />
 
       <div
         className="relative bg-background w-full rounded-lg shadow-sm 
@@ -149,7 +166,11 @@ const ListingPage = () => {
                 <ProductLoader key={index} />
               ))
             : productsList.map((product) => (
-                <ShoppingProductTile key={product?._id} product={product} />
+                <ShoppingProductTile
+                  key={product?._id}
+                  product={product}
+                  handleProductDetails={handleProductDetails}
+                />
               ))}
         </div>
         <ShoppingPagination />
