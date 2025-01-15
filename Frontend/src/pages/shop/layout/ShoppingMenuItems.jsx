@@ -50,13 +50,18 @@ const menuItems = [
 ];
 
 const ShoppingMenuItems = ({ setOpenMenu }) => {
+  const navigate = useNavigate();
+
   return (
     <nav className="flex flex-col mb-10 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {menuItems.map((menuItem) => (
         <Label
           className="text-sm font-medium cursor-pointer"
           key={menuItem.id}
-          onClick={() => setOpenMenu(false)}
+          onClick={() => {
+            setOpenMenu(false);
+            navigate(menuItem.path);
+          }}
         >
           {menuItem.label}
         </Label>
