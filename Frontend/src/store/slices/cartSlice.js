@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+axios.defaults.withCredentials = true;
+
 const initialState = {
   isLoading: false,
 
   // ? List of Cart Items
   cartItems: [],
-  totalPrice: 0,
 };
 
 const API_URL = "http://localhost:5000";
-axios.defaults.withCredentials = true;
 
 export const addToCart = createAsyncThunk(
   "cart/addCart",
@@ -30,7 +30,7 @@ export const addToCart = createAsyncThunk(
 
 export const getCartItems = createAsyncThunk(
   "cart/getCart",
-  async (userId, { rejectWithValue }) => {
+  async ({ userId }, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_URL}/api/cart/${userId}`);
       return response.data;
@@ -73,16 +73,7 @@ export const deleteFromCart = createAsyncThunk(
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {
-    computeCartTotal: (state) => {
-      state.totalPrice = state.cartItems.reduce(
-        (total, item) =>
-          total +
-          (item.salePrice > 0 ? item.salePrice : item.price) * item.quantity,
-        0
-      );
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     // ? Add to cart
     builder
@@ -137,5 +128,7 @@ const cartSlice = createSlice({
       });
   },
 });
+
+export const { computeCartTotal } = cartSlice.actions;
 
 export default cartSlice.reducer;

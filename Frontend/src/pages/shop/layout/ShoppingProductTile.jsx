@@ -1,8 +1,29 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { addToCart, getCartItems } from "@/store/slices/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const ShoppingProductTile = ({ product, handleProductDetails }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+
+  const { toast } = useToast();
+
+  const handleAddToCart = (productId) => {
+    dispatch(addToCart({ userId: user?._id, productId, quantity: 1 })).then(
+      (data) => {
+        if (data.payload?.success) {
+          dispatch(getCartItems({ userId: user?._id }));
+          toast({
+            title: data.payload?.message,
+          });
+        }
+      }
+    );
+  };
+
   return (
     <Card className="w-full max-w-sm mx-auto hover:border-slate-400 hover:shadow-lg hover:scale-95 transition duration-150">
       <div onClick={() => handleProductDetails(product?._id)}>
@@ -36,10 +57,15 @@ const ShoppingProductTile = ({ product, handleProductDetails }) => {
             )}
           </div>
         </CardContent>
-        <CardFooter>
-          <Button className="w-full">Add to Cart</Button>
-        </CardFooter>
       </div>
+      <CardFooter>
+        <Button
+          className="w-full"
+          onClick={() => handleAddToCart(product?._id)}
+        >
+          Add to Cart
+        </Button>
+      </CardFooter>
     </Card>
   );
 };

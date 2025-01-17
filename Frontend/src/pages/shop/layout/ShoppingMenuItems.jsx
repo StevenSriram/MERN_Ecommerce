@@ -1,5 +1,6 @@
+import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { LogOut, ShoppingCart, User } from "lucide-react";
+import { CircleOff, LogOut, ShoppingCart, User } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,13 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import { logoutUser } from "@/store/slices/authSlice";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import ShoppingCartTile from "./ShoppingCartTile";
 
 const menuItems = [
   {
@@ -72,8 +80,12 @@ const ShoppingMenuItems = ({ setOpenMenu }) => {
 
 const ShoppingMenuContents = ({ setOpenMenu }) => {
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [openCart, setOpenCart] = useState(false);
 
   const handleLogout = () => {
     setOpenMenu(false);
@@ -83,11 +95,68 @@ const ShoppingMenuContents = ({ setOpenMenu }) => {
     });
   };
 
+  const handleSheetOpen = () => {
+    setOpenMenu(false);
+    setOpenCart(false);
+  };
+
+  const computeCartTotal = () => {
+    const total = cartItems?.items?.reduce(
+      (acc, cur) => acc + cur?.quantity * (cur?.salePrice || cur?.price),
+      0
+    );
+    return total.toFixed(2);
+  };
+
   return (
     <div className="flex justify-between items-center gap-4">
-      <Button variant="outline" size="sm">
-        <ShoppingCart className="w-8 h-8 " />
-      </Button>
+      <Sheet open={openCart} onOpenChange={handleSheetOpen}>
+        <Button variant="outline" size="sm" onClick={() => setOpenCart(true)}>
+          <ShoppingCart className="w-8 h-8 " />
+        </Button>
+        <SheetContent side="right" className="max-w-lg pl-4 pr-0">
+          <SheetHeader className="border-b pb-1 mb-3">
+            <SheetTitle>Your Cart</SheetTitle>
+          </SheetHeader>
+          <div className="mt-6 space-y-4">
+            {cartItems && cartItems.items?.length > 0 ? (
+              <Fragment>
+                <div className="space-y-4 pl-1 pr-4 overflow-auto max-h-[400px]">
+                  {cartItems.items.map((cartItem) => (
+                    <ShoppingCartTile
+                      key={cartItem.productId}
+                      cartItem={cartItem}
+                    />
+                  ))}
+                </div>
+
+                <div className="mt-6 space-y-4 pr-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-mg font-bold">Total</span>
+                    <span className="text-mg font-bold">
+                      ${computeCartTotal()}
+                    </span>
+                  </div>
+                </div>
+                <Button
+                  className="w-[96%] mt-8"
+                  onClick={() => setOpenCart(false)}
+                >
+                  Checkout
+                </Button>
+              </Fragment>
+            ) : (
+              <div className="text-lg text-muted-foreground">
+                <CircleOff className="mx-auto my-10 h-32 w-32 text-red-400" />
+                <p className="text-center">
+                  {" "}
+                  Cart is empty. Add some items to cart to checkout.
+                </p>
+              </div>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

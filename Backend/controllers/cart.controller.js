@@ -1,9 +1,12 @@
 import Cart from "../modals/cart.modal.js";
 import Product from "../modals/product.modal.js";
 
+import memoryCache from "../utils/nodeCache.js";
+
 export const addCart = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
+
     if (!userId || !productId || !quantity) {
       return res
         .status(400)
@@ -19,7 +22,7 @@ export const addCart = async (req, res) => {
     }
 
     // ? Check Cart Exists or Create
-    const cart = Cart.findOne({ userId });
+    let cart = await Cart.findOne({ userId });
     if (!cart) {
       cart = new Cart({ userId, items: [] });
     }
@@ -36,7 +39,12 @@ export const addCart = async (req, res) => {
     // ! Save Cart
     await cart.save();
 
-    res.status(200).json({ success: true, cart });
+    // ! Delete Cart Cache
+    memoryCache.del(`cart-${userId}`);
+
+    res
+      .status(200)
+      .json({ success: true, cart, message: "Product Added to Cart" });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -50,6 +58,15 @@ export const getCart = async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "User Id required" });
+    }
+
+    // ! Check Cart Cache
+    if (memoryCache.has(`cart-${userId}`)) {
+      const userCart = memoryCache.get(`cart-${userId}`);
+      return res.status(200).json({
+        success: true,
+        cart: userCart,
+      });
     }
 
     // ? Check Cart Exists and populate product
@@ -82,12 +99,18 @@ export const getCart = async (req, res) => {
       quantity: item.quantity,
     }));
 
+    // ? Cart response with populated product
+    const userCart = {
+      ...cart._doc,
+      items: populateCartItems,
+    };
+
+    // ! Set Cart Cache
+    memoryCache.set(`cart-${userId}`, userCart);
+
     res.status(200).json({
       success: true,
-      cart: {
-        ...cart._doc,
-        items: populateCartItems,
-      },
+      cart: userCart,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -125,6 +148,9 @@ export const editCart = async (req, res) => {
 
     // ! Save Cart
     await cart.save();
+
+    // ! Delete Cart Cache
+    memoryCache.del(`cart-${userId}`);
 
     await cart.populate({
       path: "items.productId",
@@ -171,14 +197,18 @@ export const deleteCart = async (req, res) => {
     }
 
     cart.items = cart.items.filter(
-      (item) => item.productId.toString() !== productId
+      (item) => item.productId._id.toString() !== productId
     );
+    console.log(`\n${cart.items}\n`);
 
     // ! Save Cart
     await cart.save();
 
+    // ! Delete Cart Cache
+    memoryCache.del(`cart-${userId}`);
+
     await cart.populate({
-      path: "items.productId", // ! populate again
+      path: "items.productId", // ? populate user Cart Items
       select: "image title price salePrice",
     });
 

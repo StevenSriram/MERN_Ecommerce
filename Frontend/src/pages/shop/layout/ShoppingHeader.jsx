@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { Menu, ShoppingBag } from "lucide-react";
@@ -12,8 +12,16 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { ShoppingMenuContents, ShoppingMenuItems } from "./ShoppingMenuItems";
+import { getCartItems } from "@/store/slices/cartSlice";
 
 const ShoppingHeader = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(getCartItems({ userId: user?._id }));
+  }, [dispatch]);
+
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [openMenu, setOpenMenu] = useState(false);
 

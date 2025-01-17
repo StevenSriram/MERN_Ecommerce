@@ -2,12 +2,31 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { toast, useToast } from "@/hooks/use-toast";
+import { addToCart, getCartItems } from "@/store/slices/cartSlice";
 import { Star } from "lucide-react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const ShoppingDetails = ({ openDetails, setOpenDetails }) => {
   const { productDetails } = useSelector((state) => state.shop);
+  const { user } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+
+  const handleAddToCart = (productId) => {
+    dispatch(addToCart({ userId: user?._id, productId, quantity: 1 })).then(
+      (data) => {
+        if (data.payload?.success) {
+          dispatch(getCartItems({ userId: user?._id }));
+          toast({
+            title: data.payload?.message,
+          });
+        }
+      }
+    );
+  };
 
   return (
     <Dialog open={openDetails} onOpenChange={setOpenDetails}>
@@ -44,7 +63,12 @@ const ShoppingDetails = ({ openDetails, setOpenDetails }) => {
             )}
           </div>
           <div className="mt-4">
-            <Button className="w-full">Add to Cart</Button>
+            <Button
+              className="w-full"
+              onClick={() => handleAddToCart(productDetails?._id)}
+            >
+              Add to Cart
+            </Button>
           </div>
 
           <hr className="border-t mt-4 border-muted-foreground" />
