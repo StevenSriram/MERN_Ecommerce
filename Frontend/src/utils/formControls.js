@@ -66,6 +66,7 @@ export const addProductFormControls = [
       { value: "kids", label: "Kids" },
       { value: "accessories", label: "Accessories" },
       { value: "footwear", label: "Footwear" },
+      { value: "household", label: "Household" },
     ],
   },
   {

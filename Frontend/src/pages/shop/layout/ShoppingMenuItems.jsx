@@ -55,6 +55,11 @@ const menuItems = [
     label: "Accessories",
     path: "/shop/listing",
   },
+  {
+    id: "household",
+    label: "Household",
+    path: "/shop/listing",
+  },
 ];
 
 const ShoppingMenuItems = ({ setOpenMenu }) => {

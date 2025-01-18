@@ -5,6 +5,7 @@ export const filterOptions = {
     { id: "kids", label: "Kids" },
     { id: "accessories", label: "Accessories" },
     { id: "footwear", label: "Footwear" },
+    { id: "household", label: "Household" },
   ],
   brand: [
     { id: "nike", label: "Nike" },
