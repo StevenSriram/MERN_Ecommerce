@@ -7,7 +7,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import AdminMenuItems from "./AdminMenuItems";
+import { AdminMenuItems } from "./";
 
 const AdminSideBar = ({ open, setOpen }) => {
   const navigate = useNavigate();

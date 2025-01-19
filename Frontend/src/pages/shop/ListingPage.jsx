@@ -58,7 +58,7 @@ const ListingPage = () => {
   useEffect(() => {
     // ! Reset page when Filters changed
     dispatch(resetPage());
-    setSort("newest");
+    setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
   }, [searchParams]);
 
@@ -122,7 +122,7 @@ const ListingPage = () => {
 
       <div
         className="relative bg-background w-full rounded-lg shadow-sm 
-      overflow-y-auto md:max-h-[87vh] max-md:max-h-[55vh]"
+      overflow-y-auto md:max-h-[88vh] max-md:max-h-[55vh]"
       >
         <div className="p-4 border-b flex items-center justify-between">
           <h2 className="text-lg font-extrabold">All Products</h2>

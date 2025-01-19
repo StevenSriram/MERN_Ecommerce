@@ -13,7 +13,10 @@ const initialState = {
   limit: 8,
   totalProducts: 0,
 
-  // single Product Detail
+  // ? Recommended Products
+  productsForYou: [],
+
+  //* single Product Detail
   productDetails: {},
 };
 
@@ -43,6 +46,18 @@ export const getFilteredProducts = createAsyncThunk(
   }
 );
 
+export const getRecommendedProducts = createAsyncThunk(
+  "shop/getRecommendedProducts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/shop/for-you`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const shopSlice = createSlice({
   name: "shop",
   initialState,
@@ -62,6 +77,13 @@ const shopSlice = createSlice({
       state.productDetails = state.productsList.find(
         (product) => product._id === productId
       );
+
+      // ! if product not found in productsList
+      if (!state.productDetails) {
+        state.productDetails = state.productsForYou.find(
+          (product) => product._id === productId
+        );
+      }
     },
   },
   extraReducers: (builder) => {
@@ -82,6 +104,24 @@ const shopSlice = createSlice({
         state.error = null;
       })
       .addCase(getFilteredProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload?.message;
+      });
+
+    // ? Get Recommended Products State
+    builder
+      .addCase(getRecommendedProducts.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getRecommendedProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.productsForYou = action.payload?.success
+          ? action.payload?.products
+          : [];
+        state.error = null;
+      })
+      .addCase(getRecommendedProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload?.message;
       });

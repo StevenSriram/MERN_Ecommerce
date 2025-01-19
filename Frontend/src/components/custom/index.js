@@ -7,4 +7,13 @@ const SkeletonLoader = lazy(() => import("./SkeletonLoader"));
 const GifLoader = lazy(() => import("./GifLoader"));
 const ProductLoader = lazy(() => import("./ProductLoader"));
 
-export { Authorization, CommonForm, SkeletonLoader, GifLoader, ProductLoader };
+const SlideShow = lazy(() => import("./SlideShow"));
+
+export {
+  Authorization,
+  CommonForm,
+  SkeletonLoader,
+  GifLoader,
+  ProductLoader,
+  SlideShow,
+};

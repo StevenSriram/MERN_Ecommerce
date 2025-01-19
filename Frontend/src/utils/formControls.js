@@ -105,3 +105,6 @@ export const addProductFormControls = [
     placeholder: "Enter total stock",
   },
 ];
+
+// * Web3Forms
+export const ACCESS_TOKEN = "c9a99748-858d-4330-bcb8-30d967267ad2";

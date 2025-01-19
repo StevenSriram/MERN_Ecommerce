@@ -1,6 +1,7 @@
 import { lazy } from "react";
 
-const ShoppingLayout = lazy(() => import("./layout/ShoppingLayout"));
+import { ShoppingLayout } from "./layout";
+
 const HomePage = lazy(() => import("./HomePage"));
 const AccountPage = lazy(() => import("./AccountPage"));
 const CheckoutPage = lazy(() => import("./CheckoutPage"));

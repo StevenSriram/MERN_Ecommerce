@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { CommonForm, SkeletonLoader } from "@/components/custom";
 import { addProductFormControls } from "@/utils/formControls";
 
-import AdminImageUploader from "./layout/AdminImageUploader";
-import AdminProductTile from "./layout/AdminProductTile";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -19,6 +17,8 @@ import {
   getProducts,
 } from "@/store/slices/adminSlice";
 import { toast } from "@/hooks/use-toast";
+
+import { AdminImageUploader, AdminProductTile } from "./layout";
 
 const initialFormData = {
   image: null,

@@ -58,3 +58,23 @@ export const getProducts = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const recommendedProducts = async (req, res) => {
+  try {
+    // ! check Product Cache Found
+    if (memoryCache.has("recommendedProducts")) {
+      const productCache = memoryCache.get("recommendedProducts");
+      return res.status(200).json({ success: true, products: productCache });
+    }
+
+    // * Get Random 8 Products
+    const products = await Product.aggregate([{ $sample: { size: 8 } }]);
+
+    // ! Set Product Cache
+    memoryCache.set("recommendedProducts", products);
+
+    res.status(200).json({ success: true, products });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

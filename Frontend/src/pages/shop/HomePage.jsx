@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import bannerOne from "../../assets/banner-1.webp";
 import bannerTwo from "../../assets/banner-2.webp";
 import bannerThree from "../../assets/banner-3.webp";
 
 import {
+  ArrowUp,
   BabyIcon,
   Cat,
   EyeClosed,
@@ -19,10 +20,18 @@ import {
   Weight,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getFilteredProducts } from "@/store/slices/shopSlice";
-import Slideshow from "@/components/custom/SlideShow";
+import {
+  getFilteredProducts,
+  getProductDetails,
+  getRecommendedProducts,
+} from "@/store/slices/shopSlice";
+
+import { SlideShow } from "@/components/custom";
+import { ShoppingProductTile, ShoppingDetails, ShoppingFooter } from "./layout";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: ShirtIcon },
@@ -44,10 +53,11 @@ const brandsWithIcon = [
 
 const HomePage = () => {
   const slides = [bannerOne, bannerTwo, bannerThree];
+  const [openDetails, setOpenDetails] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { productsList } = useSelector((state) => state.shop);
+  const { productsList, productsForYou } = useSelector((state) => state.shop);
 
   useEffect(() => {
     dispatch(
@@ -57,10 +67,15 @@ const HomePage = () => {
         pageParams: 1,
         limitParams: 8,
       })
-    );
+    ).then(() => {
+      dispatch(getRecommendedProducts());
+    });
   }, [dispatch]);
 
-  console.log(productsList);
+  const handleProductDetails = (productId) => {
+    dispatch(getProductDetails(productId));
+    if (!openDetails) setOpenDetails(true);
+  };
 
   const handleListing = (value, group) => {
     sessionStorage.removeItem("filters");
@@ -77,8 +92,7 @@ const HomePage = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Banner Slide Show */}
-      <Slideshow slides={slides} />
-
+      <SlideShow slides={slides} />
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">
@@ -100,7 +114,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Shop by Brand</h2>
@@ -120,6 +133,64 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-10">
+            <h2 className="text-3xl font-bold text-left">Latest Products</h2>
+            <Button
+              variant="outline"
+              onClick={() => {
+                sessionStorage.removeItem("filters");
+                navigate("/shop/listing");
+              }}
+            >
+              View All
+            </Button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {productsList.map((product) => (
+              <ShoppingProductTile
+                key={product._id}
+                product={product}
+                handleProductDetails={handleProductDetails}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-10">
+            <h2 className="text-3xl font-bold text-left">Products For You</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {productsForYou.map((product) => (
+              <ShoppingProductTile
+                key={product._id}
+                product={product}
+                handleProductDetails={handleProductDetails}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+      <ShoppingDetails
+        openDetails={openDetails}
+        setOpenDetails={setOpenDetails}
+      />
+
+      <Button
+        variant="destructive"
+        onClick={() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+        className={`fixed bottom-4 right-4 px-3 rounded-full`}
+      >
+        <ArrowUp className="w-8 h-8 mx-auto" />
+      </Button>
+
+      {/* Footer */}
+      <ShoppingFooter />
     </div>
   );
 };

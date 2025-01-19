@@ -22,7 +22,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import ShoppingCartTile from "./ShoppingCartTile";
+// import ShoppingCartTile from "./ShoppingCartTile";
+import { ShoppingCartTile } from "./";
 
 const menuItems = [
   {
@@ -65,6 +66,23 @@ const menuItems = [
 const ShoppingMenuItems = ({ setOpenMenu }) => {
   const navigate = useNavigate();
 
+  const handleListing = (value, group) => {
+    setOpenMenu(false);
+    // ? Navigate to home
+    if (value.id === "home") {
+      return navigate(value.path);
+    }
+
+    sessionStorage.removeItem("filters");
+    // ? create new filters
+    const curFilters = {
+      [group]: [value.id],
+    };
+
+    sessionStorage.setItem("filters", JSON.stringify(curFilters));
+    navigate(value.path);
+  };
+
   return (
     <nav className="flex flex-col mb-10 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {menuItems.map((menuItem) => (
@@ -72,8 +90,7 @@ const ShoppingMenuItems = ({ setOpenMenu }) => {
           className="text-sm font-medium cursor-pointer"
           key={menuItem.id}
           onClick={() => {
-            setOpenMenu(false);
-            navigate(menuItem.path);
+            handleListing(menuItem, "category");
           }}
         >
           {menuItem.label}

@@ -11,7 +11,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { ShoppingMenuContents, ShoppingMenuItems } from "./ShoppingMenuItems";
+import { ShoppingMenuItems, ShoppingMenuContents } from "./";
 import { getCartItems } from "@/store/slices/cartSlice";
 
 const ShoppingHeader = () => {
