@@ -7,10 +7,12 @@ import morgan from "morgan";
 
 import config from "../env.config.js";
 import connectDB from "./db/configDB.js";
+
 import authRoutes from "./routes/auth.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import shopRoutes from "./routes/shop.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
+import addressRoutes from "./routes/address.routes.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -37,6 +39,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/shop", shopRoutes);
 // ? Cart Routes
 app.use("/api/cart", cartRoutes);
+// ? Address Routes
+app.use("/api/address", addressRoutes);
 
 // * Testing Route
 app.get("/", (req, res) => {
