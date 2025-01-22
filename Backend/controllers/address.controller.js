@@ -25,7 +25,7 @@ export const addAddress = async (req, res) => {
     await newAddress.save();
 
     // ! Delete Address Cache
-    memoryCache.del("addresses");
+    memoryCache.del(`addresses-${userId}`);
 
     res
       .status(200)

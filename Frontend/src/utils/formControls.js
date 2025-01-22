@@ -13,6 +13,7 @@ export const registerFormControls = [
     placeholder: "Enter email",
     componentType: "input",
     type: "email",
+    pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$",
   },
   {
     name: "password",
@@ -20,6 +21,7 @@ export const registerFormControls = [
     placeholder: "Enter password",
     componentType: "input",
     type: "password",
+    minLength: 4,
   },
 ];
 
@@ -30,6 +32,7 @@ export const loginFormControls = [
     placeholder: "Enter email",
     componentType: "input",
     type: "email",
+    pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$",
     focus: true,
   },
   {
@@ -38,6 +41,7 @@ export const loginFormControls = [
     placeholder: "Enter password",
     componentType: "input",
     type: "password",
+    minLength: 4,
   },
 ];
 
@@ -48,6 +52,7 @@ export const addProductFormControls = [
     componentType: "input",
     type: "text",
     placeholder: "Enter product title",
+    focus: true,
   },
   {
     label: "Description",
@@ -88,6 +93,7 @@ export const addProductFormControls = [
     name: "price",
     componentType: "input",
     type: "number",
+    min: 0,
     placeholder: "Enter product price",
   },
   {
@@ -95,6 +101,7 @@ export const addProductFormControls = [
     name: "salePrice",
     componentType: "input",
     type: "number",
+    min: 0,
     placeholder: "Enter sale price (optional)",
   },
   {
@@ -102,7 +109,52 @@ export const addProductFormControls = [
     name: "totalStock",
     componentType: "input",
     type: "number",
+    min: 0,
     placeholder: "Enter total stock",
+  },
+];
+
+export const addressFormControls = [
+  {
+    label: "Address",
+    name: "address",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your address",
+    focus: true,
+  },
+  {
+    label: "City",
+    name: "city",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter your city",
+  },
+  {
+    label: "Pincode",
+    name: "pincode",
+    componentType: "input",
+    type: "number",
+    placeholder: "Enter your pincode",
+    minLength: 6,
+    maxLength: 6,
+    pattern: "[0-9]{6}",
+  },
+  {
+    label: "Phone",
+    name: "phone",
+    componentType: "input",
+    type: "number",
+    placeholder: "Enter your phone number",
+    minLength: 10,
+    maxLength: 10,
+    pattern: "[0-9]{10}",
+  },
+  {
+    label: "Notes",
+    name: "notes",
+    componentType: "textarea",
+    placeholder: "Enter any additional notes",
   },
 ];
 

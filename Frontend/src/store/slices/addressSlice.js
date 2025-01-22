@@ -22,7 +22,7 @@ export const addAddress = createAsyncThunk(
 
 export const getAddresses = createAsyncThunk(
   "address/getAddresses",
-  async (userId, { rejectWithValue }) => {
+  async ({ userId }, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_URL}/api/address/${userId}`);
       return response.data;

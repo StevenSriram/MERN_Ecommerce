@@ -15,6 +15,9 @@ const ShoppingDetails = lazy(() => import("./ShoppingDetails"));
 
 const ShoppingFooter = lazy(() => import("./ShoppingFooter"));
 
+const ShoppingAddress = lazy(() => import("./ShoppingAddress"));
+const ShoppingOrders = lazy(() => import("./ShoppingOrders"));
+
 export {
   ShoppingLayout,
   ShoppingCartTile,
@@ -26,4 +29,6 @@ export {
   ShoppingPagination,
   ShoppingProductTile,
   ShoppingFooter,
+  ShoppingAddress,
+  ShoppingOrders,
 };
