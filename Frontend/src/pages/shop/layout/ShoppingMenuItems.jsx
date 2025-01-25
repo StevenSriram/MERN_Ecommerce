@@ -162,7 +162,10 @@ const ShoppingMenuContents = ({ setOpenMenu }) => {
                 </div>
                 <Button
                   className="w-[96%] mt-8"
-                  onClick={() => setOpenCart(false)}
+                  onClick={() => {
+                    setOpenCart(false);
+                    navigate("/shop/checkout");
+                  }}
                 >
                   Checkout
                 </Button>
@@ -194,7 +197,11 @@ const ShoppingMenuContents = ({ setOpenMenu }) => {
           <DropdownMenuItem
             onClick={() => {
               setOpenMenu(false);
-              navigate("/shop/account");
+              navigate("/shop/account", {
+                state: {
+                  tab: "orders",
+                },
+              });
             }}
           >
             <User className="mr-2 h-4 w-4" />

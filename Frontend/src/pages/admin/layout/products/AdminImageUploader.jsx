@@ -1,16 +1,16 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Label } from "../../../components/ui/label";
-import { Input } from "../../../components/ui/input";
+import { Label } from "../../../../components/ui/label";
+import { Input } from "../../../../components/ui/input";
 import { CloudSnow, FileIcon, UploadCloud, XIcon } from "lucide-react";
-import { Button } from "../../../components/ui/button";
+import { Button } from "../../../../components/ui/button";
 
 import {
   uploadImage,
   deleteImage,
   clearImageURL,
-} from "../../../store/slices/adminSlice";
+} from "../../../../store/slices/adminSlice";
 
 const AdminImageUploader = ({ imageFile, setImageFile, editMode }) => {
   const inputRef = useRef(null);

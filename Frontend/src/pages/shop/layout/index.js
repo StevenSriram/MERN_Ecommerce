@@ -5,18 +5,20 @@ const ShoppingLayout = lazy(() => import("./ShoppingLayout"));
 const ShoppingHeader = lazy(() => import("./ShoppingHeader"));
 import { ShoppingMenuItems, ShoppingMenuContents } from "./ShoppingMenuItems";
 
-const ShoppingPagination = lazy(() => import("./ShoppingPagination"));
-const ShoppingFilter = lazy(() => import("./ShoppingFilter"));
+const ShoppingPagination = lazy(() => import("./products/ShoppingPagination"));
+const ShoppingFilter = lazy(() => import("./products/ShoppingFilter"));
 
-const ShoppingCartTile = lazy(() => import("./ShoppingCartTile"));
+const ShoppingCartTile = lazy(() => import("./products/ShoppingCartTile"));
 
-const ShoppingProductTile = lazy(() => import("./ShoppingProductTile"));
-const ShoppingDetails = lazy(() => import("./ShoppingDetails"));
+const ShoppingProductTile = lazy(() =>
+  import("./products/ShoppingProductTile")
+);
+const ShoppingDetails = lazy(() => import("./products/ShoppingDetails"));
 
 const ShoppingFooter = lazy(() => import("./ShoppingFooter"));
 
-const ShoppingAddress = lazy(() => import("./ShoppingAddress"));
-const ShoppingOrders = lazy(() => import("./ShoppingOrders"));
+const ShoppingAddress = lazy(() => import("./orders/ShoppingAddress"));
+const ShoppingOrders = lazy(() => import("./orders/ShoppingOrders"));
 
 export {
   ShoppingLayout,

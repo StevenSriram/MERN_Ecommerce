@@ -85,7 +85,7 @@ const ShoppingAddress = () => {
   const handleAddress = (e) => {
     e.preventDefault();
 
-    if (addresses.length >= 2 && !editedId) {
+    if (addresses.length >= 3 && !editedId) {
       setFormData({
         address: "",
         city: "",

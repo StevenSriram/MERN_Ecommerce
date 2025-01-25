@@ -77,7 +77,7 @@ const CommonForm = ({
               onChange={(e) =>
                 setFormData({ ...formData, [inputProps.name]: e.target.value })
               }
-              autoFocus={focus}
+              autoFocus={focus || false}
             />
           );
       }

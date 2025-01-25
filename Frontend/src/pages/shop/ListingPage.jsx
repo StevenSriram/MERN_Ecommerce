@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import ShoppingFilter from "./layout/ShoppingFilter";
+import ShoppingFilter from "./layout/products/ShoppingFilter";
 import { sortOptions } from "@/utils/productsUtils";
-import ShoppingProductTile from "./layout/ShoppingProductTile";
+import ShoppingProductTile from "./layout/products/ShoppingProductTile";
 import {
   getFilteredProducts,
   getProductDetails,
@@ -22,8 +22,8 @@ import { ProductLoader } from "@/components/custom";
 
 import { ArrowUpDownIcon } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
-import ShoppingPagination from "./layout/ShoppingPagination";
-import ShoppingDetails from "./layout/ShoppingDetails";
+import ShoppingPagination from "./layout/products/ShoppingPagination";
+import ShoppingDetails from "./layout/products/ShoppingDetails";
 
 const getQueryParams = (filters, page, limit) => {
   const queryParams = [];

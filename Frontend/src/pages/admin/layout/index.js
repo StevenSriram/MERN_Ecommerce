@@ -7,8 +7,8 @@ const AdminMenuItems = lazy(() => import("./AdminMenuItems"));
 
 const AdminSideBar = lazy(() => import("./AdminSideBar"));
 
-const AdminImageUploader = lazy(() => import("./AdminImageUploader"));
-const AdminProductTile = lazy(() => import("./AdminProductTile"));
+const AdminImageUploader = lazy(() => import("./products/AdminImageUploader"));
+const AdminProductTile = lazy(() => import("./products/AdminProductTile"));
 
 export {
   AdminLayout,

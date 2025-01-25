@@ -52,7 +52,6 @@ export const addProductFormControls = [
     componentType: "input",
     type: "text",
     placeholder: "Enter product title",
-    focus: true,
   },
   {
     label: "Description",
@@ -94,6 +93,7 @@ export const addProductFormControls = [
     componentType: "input",
     type: "number",
     min: 0,
+    step: "0.05",
     placeholder: "Enter product price",
   },
   {
@@ -102,6 +102,7 @@ export const addProductFormControls = [
     componentType: "input",
     type: "number",
     min: 0,
+    step: "0.05",
     placeholder: "Enter sale price (optional)",
   },
   {
@@ -121,7 +122,6 @@ export const addressFormControls = [
     componentType: "input",
     type: "text",
     placeholder: "Enter your address",
-    focus: true,
   },
   {
     label: "City",
@@ -134,7 +134,7 @@ export const addressFormControls = [
     label: "Pincode",
     name: "pincode",
     componentType: "input",
-    type: "number",
+    type: "text",
     placeholder: "Enter your pincode",
     minLength: 6,
     maxLength: 6,
@@ -144,7 +144,7 @@ export const addressFormControls = [
     label: "Phone",
     name: "phone",
     componentType: "input",
-    type: "number",
+    type: "text",
     placeholder: "Enter your phone number",
     minLength: 10,
     maxLength: 10,
