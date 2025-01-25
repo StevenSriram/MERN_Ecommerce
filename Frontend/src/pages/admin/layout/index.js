@@ -10,6 +10,8 @@ const AdminSideBar = lazy(() => import("./AdminSideBar"));
 const AdminImageUploader = lazy(() => import("./products/AdminImageUploader"));
 const AdminProductTile = lazy(() => import("./products/AdminProductTile"));
 
+const AdminOrdersDetails = lazy(() => import("./orders/AdminOrdersDetails"));
+
 export {
   AdminLayout,
   AdminHeader,
@@ -17,4 +19,5 @@ export {
   AdminSideBar,
   AdminImageUploader,
   AdminProductTile,
+  AdminOrdersDetails,
 };

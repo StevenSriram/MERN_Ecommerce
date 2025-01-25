@@ -13,7 +13,7 @@ export const registerFormControls = [
     placeholder: "Enter email",
     componentType: "input",
     type: "email",
-    pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$",
+    pattern: "[a-z0-9._-]+@[a-z.]+.[a-z]{2,}$",
   },
   {
     name: "password",
@@ -32,7 +32,7 @@ export const loginFormControls = [
     placeholder: "Enter email",
     componentType: "input",
     type: "email",
-    pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$",
+    pattern: "[a-z0-9._-]+@[a-z.]+.[a-z]{2,}$",
     focus: true,
   },
   {
