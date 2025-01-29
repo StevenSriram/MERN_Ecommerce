@@ -199,7 +199,6 @@ export const deleteCart = async (req, res) => {
     cart.items = cart.items.filter(
       (item) => item.productId._id.toString() !== productId
     );
-    console.log(`\n${cart.items}\n`);
 
     // ! Save Cart
     await cart.save();

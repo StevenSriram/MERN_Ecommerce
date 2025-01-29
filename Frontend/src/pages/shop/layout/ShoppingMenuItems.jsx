@@ -164,6 +164,7 @@ const ShoppingMenuContents = ({ setOpenMenu }) => {
                   className="w-[96%] mt-8"
                   onClick={() => {
                     setOpenCart(false);
+                    setOpenMenu(false);
                     navigate("/shop/checkout");
                   }}
                 >
