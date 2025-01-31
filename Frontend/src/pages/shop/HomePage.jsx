@@ -67,9 +67,8 @@ const HomePage = () => {
         pageParams: 1,
         limitParams: 8,
       })
-    ).then(() => {
-      dispatch(getRecommendedProducts());
-    });
+    );
+    dispatch(getRecommendedProducts());
   }, [dispatch]);
 
   const handleProductDetails = (productId) => {

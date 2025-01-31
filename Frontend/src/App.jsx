@@ -17,7 +17,9 @@ import {
   CheckoutPage,
   ListingPage,
 } from "./pages/shop";
-import { NotFoundPage, UnAuthPage } from "./pages/others";
+import { ShoppingPayment } from "./pages/shop/layout";
+
+import { NotFoundPage, UnAuthPage, PaymentReturnPage } from "./pages/others";
 import { Authorization, GifLoader } from "./components/custom";
 
 import { checkAuthentication } from "./store/slices/authSlice";
@@ -81,7 +83,18 @@ const App = () => {
             <Route path="account" element={<AccountPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="listing" element={<ListingPage />} />
+            <Route path="payment-status" element={<ShoppingPayment />} />
           </Route>
+
+          {/* Payment Routes */}
+          <Route
+            path="/payment-return"
+            element={
+              <Authorization>
+                <PaymentReturnPage />
+              </Authorization>
+            }
+          />
 
           {/* UnAuthorized Routes */}
           <Route path="/un-auth" element={<UnAuthPage />} />

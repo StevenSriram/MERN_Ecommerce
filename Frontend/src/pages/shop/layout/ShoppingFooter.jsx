@@ -62,34 +62,6 @@ const ShoppingFooter = () => {
     setContactData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const formData = new FormData();
-  //   formData.append("name", contactData.name);
-  //   formData.append("email", contactData.email);
-  //   formData.append("message", contactData.message);
-  //   formData.append("access_key", ACCESS_TOKEN);
-
-  //   const object = Object.fromEntries(formData);
-  //   const json = JSON.stringify(object);
-
-  //   try {
-  //     const res = await axios.post("https://api.web3forms.com/submit", json, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Accept: "application/json",
-  //       },
-  //     });
-
-  //     if (res.data.success) {
-  //       console.log("Success", res.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error submitting form:", error);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 

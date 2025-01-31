@@ -13,8 +13,8 @@ export const createPaymentJSON = (cartItems, totalAmount) => {
       payment_method: "paypal",
     },
     redirect_urls: {
-      return_url: `${process.env.CLIENT_URL}/payment/success`,
-      cancel_url: `${process.env.CLIENT_URL}/payment/cancel`,
+      return_url: `${process.env.CLIENT_URL}/payment-return`,
+      cancel_url: `${process.env.CLIENT_URL}/shop/payment-status`,
     },
     transactions: [
       {

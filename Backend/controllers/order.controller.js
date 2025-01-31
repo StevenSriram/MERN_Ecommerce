@@ -1,4 +1,8 @@
 import Order from "../modals/order.modal.js";
+import Cart from "../modals/cart.modal.js";
+
+import memoryCache from "../utils/nodeCache.js";
+
 import paypal, { createPaymentJSON } from "../utils/paypal.js";
 
 export const createOrder = async (req, res) => {
@@ -45,8 +49,6 @@ export const createOrder = async (req, res) => {
         payerId,
       });
 
-      console.log(newOrder);
-
       // ! Add New Order
       await newOrder.save();
 
@@ -71,6 +73,36 @@ export const createOrder = async (req, res) => {
 
 export const capturePayment = async (req, res) => {
   try {
+    const { paymentId, payerId, orderId } = req.body;
+
+    // ? find Order
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order Not Found" });
+    }
+
+    // ? Update Order Details
+    order.paymentStatus = "paid";
+    order.orderStatus = "confirmed";
+    order.orderUpdateDate = Date.now();
+    order.paymentId = paymentId;
+    order.payerId = payerId;
+
+    // ! delete cart
+    await Cart.findByIdAndDelete(order.cartId);
+    // ! Delete Cart Cache
+    memoryCache.del(`cart-${order.cartId}`);
+
+    // ! Save Order
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Order Confirmed",
+      order,
+    });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }

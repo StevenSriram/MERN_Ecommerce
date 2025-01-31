@@ -3,10 +3,15 @@ import { getAddresses } from "@/store/slices/addressSlice";
 import { createOrder } from "@/store/slices/orderSlice";
 
 import checkOutImg from "../../assets/checkout.webp";
-import { CircleDollarSign, Currency, MapPinPlus } from "lucide-react";
+import {
+  CircleDollarSign,
+  CircleOff,
+  Currency,
+  MapPinPlus,
+} from "lucide-react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -16,7 +21,9 @@ import { useToast } from "@/hooks/use-toast";
 const CartContents = ({ selectedAddress }) => {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
-  const { isLoading, approvalURL } = useSelector((state) => state.order);
+  const { isLoading, approvalURL, orderId } = useSelector(
+    (state) => state.order
+  );
 
   const dispatch = useDispatch();
   const { toast } = useToast();
@@ -76,11 +83,12 @@ const CartContents = ({ selectedAddress }) => {
 
   if (approvalURL) {
     window.location.href = approvalURL;
+    console.log(approvalURL);
   }
 
   return (
     <div className="mt-6 space-y-4">
-      {cartItems && cartItems.items?.length > 0 && (
+      {cartItems && cartItems.items?.length > 0 ? (
         <Fragment>
           <div className="space-y-4 pl-1 pr-4">
             {cartItems.items.map((cartItem) => (
@@ -123,13 +131,28 @@ const CartContents = ({ selectedAddress }) => {
             {isLoading ? (
               <Currency className="text-center animate-spin w-10 h-10" />
             ) : (
-              <Fragment>
-                <CircleDollarSign />
-                <span className="ml-2">Checkout</span>
-              </Fragment>
+              <span className="flex items-center">
+                <CircleDollarSign className="w-12 h-12 inline-block mr-2" />{" "}
+                Checkout
+              </span>
             )}
           </Button>
         </Fragment>
+      ) : (
+        <div className="text-lg text-muted-foreground">
+          <CircleOff className="mx-auto my-10 h-32 w-32 text-red-400" />
+          <p className="text-center text-xl">
+            {" "}
+            Cart is empty.
+            <Link
+              to="/shop"
+              className="ml-1 hover:underline transition duration-200 ease-in-out"
+            >
+              Add some items to cart{" "}
+            </Link>
+            to checkout.
+          </p>
+        </div>
       )}
     </div>
   );
