@@ -52,6 +52,10 @@ export const createOrder = async (req, res) => {
       // ! Add New Order
       await newOrder.save();
 
+      // ! Delete Order Cache
+      memoryCache.del(`orders-${userId}`);
+      memoryCache.del("orders");
+
       // ? get Approval URL
       const approvalURL = payment.links.find(
         (link) => link.rel === "approval_url"
@@ -93,7 +97,7 @@ export const capturePayment = async (req, res) => {
     // ! delete cart
     await Cart.findByIdAndDelete(order.cartId);
     // ! Delete Cart Cache
-    memoryCache.del(`cart-${order.cartId}`);
+    memoryCache.del(`cart-${order.userId}`);
 
     // ! Save Order
     await order.save();
@@ -103,6 +107,97 @@ export const capturePayment = async (req, res) => {
       message: "Order Confirmed",
       order,
     });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const failedPayment = async (req, res) => {
+  try {
+    const { orderId } = req.body;
+
+    // ? find Order
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order Not Found" });
+    }
+
+    // ? Update Order Details
+    order.paymentStatus = "failed";
+    order.orderStatus = "failed";
+    order.orderUpdateDate = Date.now();
+
+    // ! delete cart
+    await Cart.findByIdAndDelete(order.cartId);
+    // ! Delete Cart Cache
+    memoryCache.del(`cart-${order.userId}`);
+
+    // ! Save Order
+    await order.save();
+
+    return res.status(402).json({ success: true, message: "Payment Failed" });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getOrders = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User Id required" });
+    }
+
+    // ! Check Order Cache
+    if (memoryCache.has(`orders-${userId}`)) {
+      const orderCache = memoryCache.get(`orders-${userId}`);
+      return res
+        .status(200)
+        .json({ success: true, allOrders: JSON.parse(orderCache) });
+    }
+
+    const allOrders = await Order.find({ userId });
+    if (!allOrders) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Orders Not Found" });
+    }
+
+    // ! Set Order Cache
+    memoryCache.set(`orders-${userId}`, JSON.stringify(allOrders));
+
+    return res.status(200).json({ success: true, allOrders });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getAllOrders = async (req, res) => {
+  try {
+    // ! Check Order Cache
+    if (memoryCache.has("orders")) {
+      const orderCache = memoryCache.get("orders");
+      return res
+        .status(200)
+        .json({ success: true, allOrders: JSON.parse(orderCache) });
+    }
+
+    const allOrders = await Order.find();
+    if (!allOrders) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Orders Not Found" });
+    }
+
+    // ! Set Order Cache
+    memoryCache.set("orders", JSON.stringify(allOrders));
+
+    return res.status(200).json({ success: true, allOrders });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }

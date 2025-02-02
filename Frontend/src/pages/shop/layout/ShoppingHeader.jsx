@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -44,6 +45,7 @@ const ShoppingHeader = () => {
 
         <Sheet open={openMenu} onOpenChange={setOpenMenu}>
           <SheetContent side="left" className="w-64">
+            <SheetDescription className="sr-only">Menu</SheetDescription>
             <SheetHeader className="border-b mb-5 py-2">
               <SheetTitle className="flex items-center">
                 <ShoppingBag className="h-6 w-6 text-green-500" />

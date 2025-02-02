@@ -1,17 +1,21 @@
-import { CommonForm } from "@/components/custom";
 import { useState } from "react";
+import { CommonForm } from "@/components/custom";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-
 import { Orbit } from "lucide-react";
+
+import { useDispatch, useSelector } from "react-redux";
+import { getOrderDetails } from "@/store/slices/orderSlice";
+import { useToast } from "@/hooks/use-toast";
 
 const orderStatusFormControls = [
   {
@@ -20,7 +24,6 @@ const orderStatusFormControls = [
     placeholder: "Update Order Status",
     componentType: "select",
     options: [
-      { label: "Pending", value: "pending" },
       { label: "Processing", value: "processing" },
       { label: "Shipped", value: "shipped" },
       { label: "Delivered", value: "delivered" },
@@ -29,19 +32,35 @@ const orderStatusFormControls = [
   },
 ];
 
-const AdminOrdersDetails = () => {
+const AdminOrdersDetails = ({ orderId, orderStatusColors }) => {
   const [formData, setFormData] = useState({ status: "" });
   const [openOrderStatus, setOpenOrderStatus] = useState(false);
+
+  const dispatch = useDispatch();
+  const { orderDetails } = useSelector((state) => state.order);
+  const { toast } = useToast();
 
   const handleStatus = (e) => {
     e.preventDefault();
     setOpenOrderStatus(false);
-    alert("Status updated successfully");
+
+    toast({
+      title: `Order Status Updated Successfully`,
+    });
+    setFormData({ status: "" });
+  };
+
+  const handleOrderDetails = () => {
+    dispatch(getOrderDetails(orderId));
+    setOpenOrderStatus(true);
   };
 
   return (
     <Dialog open={openOrderStatus} onOpenChange={setOpenOrderStatus}>
-      <Button onClick={() => setOpenOrderStatus(true)}>View</Button>
+      <DialogDescription className="sr-only">
+        Order Details of Order ID: {orderDetails?._id}
+      </DialogDescription>
+      <Button onClick={handleOrderDetails}>View</Button>
       <DialogContent className="sm:max-w-[600px] pr-2 pb-3">
         <DialogHeader>
           <DialogTitle>
@@ -53,23 +72,29 @@ const AdminOrdersDetails = () => {
           <div className="grid gap-2">
             <div className="flex mt-6 items-center justify-between">
               <p className="font-medium">Order ID</p>
-              <Label>126387</Label>
+              <Label>{orderDetails?._id}</Label>
             </div>
             <div className="flex mt-2 items-center justify-between">
               <p className="font-medium">Order Date</p>
-              <Label>12/12/2022</Label>
+              <Label>{orderDetails?.orderDate.split("T")[0]}</Label>
             </div>
             <div className="flex mt-2 items-center justify-between">
               <p className="font-medium">Order Price</p>
-              <Label>$100</Label>
+              <Label>{orderDetails?.totalAmount}</Label>
             </div>
             <div className="flex mt-2 items-center justify-between">
               <p className="font-medium">Payment method</p>
-              <Label>Credit Card</Label>
+              <Label>
+                {orderDetails?.paymentStatus === "failed"
+                  ? "None"
+                  : orderDetails?.payerId
+                  ? "Paypal"
+                  : "Cash on Delivery"}
+              </Label>
             </div>
             <div className="flex mt-2 items-center justify-between">
               <p className="font-medium">Payment Status</p>
-              <Label>pending</Label>
+              <Label>{orderDetails?.paymentStatus}</Label>
             </div>
             <div className="flex mt-2 items-center justify-between">
               <p className="font-medium">Order Status</p>
@@ -77,34 +102,40 @@ const AdminOrdersDetails = () => {
                 <Badge
                   className={`py-1 px-3 
                   
-                    bg-black
+                    ${orderStatusColors[orderDetails?.orderStatus]}
                 }`}
                 >
-                  Delivered
+                  {orderDetails?.orderStatus}
                 </Badge>
               </Label>
             </div>
           </div>
-          <hr className="my-4" />
+          <hr className="mt-4 mb-3" />
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <div className="font-medium">Shipping Info</div>
-              <div className="grid gap-0.5 text-muted-foreground">
-                <p>John Doe</p>
-                <p>123 Main Street</p>
-                <p>Anytown, USA</p>
-                <p>123-456-7890</p>
+              <div className="font-medium mb-3">Shipping Info</div>
+              <div className="grid gap-2 text-muted-foreground">
+                <Label>UserId : {orderDetails?.userId}</Label>
+                <Label className="mt-2">
+                  {orderDetails?.addressInfo?.address}
+                </Label>
+                <Label>{orderDetails?.addressInfo?.city}</Label>
+                <Label>{orderDetails?.addressInfo?.phone}</Label>
+                <Label>{orderDetails?.addressInfo?.pincode}</Label>
               </div>
             </div>
           </div>
 
-          <CommonForm
-            formControls={orderStatusFormControls}
-            formData={formData}
-            setFormData={setFormData}
-            buttonText={"Update Order Status"}
-            handleSubmit={handleStatus}
-          />
+          {(orderDetails?.orderStatus !== "delivered" ||
+            orderDetails?.orderStatus !== "rejected") && (
+            <CommonForm
+              formControls={orderStatusFormControls}
+              formData={formData}
+              setFormData={setFormData}
+              buttonText={"Update Order Status"}
+              handleSubmit={handleStatus}
+            />
+          )}
         </div>
       </DialogContent>
     </Dialog>

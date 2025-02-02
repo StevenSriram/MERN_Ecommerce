@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -10,8 +13,24 @@ import {
 } from "@/components/ui/table";
 
 import { ShoppingOrdersDetails } from "..";
+import { getAllOrders } from "@/store/slices/orderSlice";
+
+const orderStatusColors = {
+  confirmed: "bg-emerald-500",
+  failed: "bg-red-500",
+  shipped: "bg-blue-500",
+  delivered: "bg-green-500",
+};
 
 const ShoppingOrders = () => {
+  const { user } = useSelector((state) => state.auth);
+  const { orderList } = useSelector((state) => state.order);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllOrders(user?._id));
+  }, [dispatch]);
+
   return (
     <Card className="mt-2 border border-slate-300 shadow-lg">
       <CardHeader>
@@ -28,19 +47,31 @@ const ShoppingOrders = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>1</TableCell>
-              <TableCell>25/06/2023</TableCell>
-              <TableCell>
-                <Badge className={"bg-green-500 hover:bg-green-700"}>
-                  Completed
-                </Badge>
-              </TableCell>
-              <TableCell>₹ 1000</TableCell>
-              <TableCell>
-                <ShoppingOrdersDetails />
-              </TableCell>
-            </TableRow>
+            {orderList?.length > 0 &&
+              orderList.map((orderItem) => {
+                return (
+                  <TableRow key={orderItem?._id}>
+                    <TableCell>{orderItem?._id}</TableCell>
+                    <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`${
+                          orderStatusColors[orderItem?.orderStatus]
+                        }`}
+                      >
+                        {orderItem?.orderStatus}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>${orderItem?.totalAmount}</TableCell>
+                    <TableCell>
+                      <ShoppingOrdersDetails
+                        orderId={orderItem?._id}
+                        orderStatusColors={orderStatusColors}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </CardContent>

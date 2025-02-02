@@ -19,6 +19,8 @@ const PaymentReturnPage = () => {
 
       dispatch(capturePayment({ paymentId, payerId, orderId })).then((data) => {
         if (data?.payload?.success) {
+          sessionStorage.removeItem("orderId");
+
           navigate("/shop/payment-status", { state: { completed: true } });
         }
       });

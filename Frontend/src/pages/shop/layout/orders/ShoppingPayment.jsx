@@ -1,15 +1,33 @@
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import successImg from "../../../../assets/success.webp";
 import failureImg from "../../../../assets/failure.webp";
-
 import { Button } from "@/components/ui/button";
+
+import { useDispatch } from "react-redux";
+import { failedPayment } from "@/store/slices/orderSlice";
 
 const ShoppingPayment = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const completed = location.state?.completed ?? false;
+
+  useEffect(() => {
+    if (!completed) {
+      const orderId = sessionStorage.getItem("orderId");
+
+      dispatch(failedPayment(orderId)).then((data) => {
+        if (data.payload?.success) {
+          sessionStorage.removeItem("orderId");
+        }
+      });
+    }
+  }, []);
+
   const handleNavigate = () => {
     if (completed) {
       navigate("/shop");

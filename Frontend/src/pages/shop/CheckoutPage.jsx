@@ -49,7 +49,7 @@ const CartContents = ({ selectedAddress }) => {
         quantity: item?.quantity,
       })),
 
-      addessInfo: {
+      addressInfo: {
         addressId: selectedAddress?._id,
         address: selectedAddress?.address,
         city: selectedAddress?.city,

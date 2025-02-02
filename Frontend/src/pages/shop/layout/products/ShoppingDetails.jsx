@@ -1,6 +1,11 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { addToCart, getCartItems } from "@/store/slices/cartSlice";
@@ -31,6 +36,9 @@ const ShoppingDetails = ({ openDetails, setOpenDetails }) => {
   return (
     <Dialog open={openDetails} onOpenChange={setOpenDetails}>
       <DialogContent className="grid grid-cols-2 gap-6 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
+        <DialogDescription className="sr-only">
+          Product Details of Product ID: {productDetails?._id}
+        </DialogDescription>
         <DialogTitle className="sr-only">Products Details</DialogTitle>
         <div className="relative overflow-hidden rounded-lg">
           <img

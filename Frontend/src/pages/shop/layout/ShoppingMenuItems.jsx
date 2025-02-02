@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CircleOff, LogOut, ShoppingCart, User } from "lucide-react";
 
@@ -16,14 +16,15 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import { logoutUser } from "@/store/slices/authSlice";
+
+import { ShoppingCartTile } from "./";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
-// import ShoppingCartTile from "./ShoppingCartTile";
-import { ShoppingCartTile } from "./";
+} from "@/components/ui/Sheet";
 
 const menuItems = [
   {
@@ -117,7 +118,7 @@ const ShoppingMenuContents = ({ setOpenMenu }) => {
     });
   };
 
-  const handleSheetOpen = () => {
+  const handleOpen = () => {
     setOpenMenu(false);
     setOpenCart(false);
   };
@@ -132,11 +133,12 @@ const ShoppingMenuContents = ({ setOpenMenu }) => {
 
   return (
     <div className="flex justify-between items-center gap-4">
-      <Sheet open={openCart} onOpenChange={handleSheetOpen}>
+      <Sheet open={openCart} onOpenChange={handleOpen}>
         <Button variant="outline" size="sm" onClick={() => setOpenCart(true)}>
           <ShoppingCart className="w-8 h-8 " />
         </Button>
         <SheetContent side="right" className="max-w-lg pl-4 pr-0">
+          <SheetDescription className="sr-only">Your Cart</SheetDescription>
           <SheetHeader className="border-b pb-1 mb-3">
             <SheetTitle>Your Cart</SheetTitle>
           </SheetHeader>
@@ -152,7 +154,7 @@ const ShoppingMenuContents = ({ setOpenMenu }) => {
                   ))}
                 </div>
 
-                <div className="mt-6 space-y-4 pr-4">
+                <div className="mt-8 space-y-4 pr-4">
                   <div className="flex items-center justify-between">
                     <span className="text-mg font-bold">Total</span>
                     <span className="text-mg font-bold">

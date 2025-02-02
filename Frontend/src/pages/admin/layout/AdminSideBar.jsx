@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -16,6 +17,7 @@ const AdminSideBar = ({ open, setOpen }) => {
     <>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="left" className="w-64">
+          <SheetDescription className="sr-only">Admin Panel</SheetDescription>
           <div className="flex flex-col h-full">
             <SheetHeader className="border-b">
               <SheetTitle

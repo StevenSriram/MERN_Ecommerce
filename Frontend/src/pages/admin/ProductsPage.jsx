@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -110,6 +111,7 @@ const ProductsPage = () => {
 
       <Sheet open={openAddProduct} onOpenChange={setOpenAddProduct}>
         <SheetContent side="right" className="overflow-auto">
+          <SheetDescription className="sr-only">Add Product</SheetDescription>
           <SheetHeader className="border-b pt-0 pb-2">
             <SheetTitle>
               {editID ? "Edit Product" : "Add New Product"}
