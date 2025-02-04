@@ -5,6 +5,7 @@ import {
   failedPayment,
   getOrders,
   getAllOrders,
+  updateOrderStatus,
 } from "../controllers/order.controller.js";
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.post("/failed", failedPayment);
 
 router.get("/:userId", getOrders);
 router.get("/", getAllOrders);
+router.put("/update/:orderId", updateOrderStatus);
 
 export default router;

@@ -16,10 +16,13 @@ import { ShoppingOrdersDetails } from "..";
 import { getAllOrders } from "@/store/slices/orderSlice";
 
 const orderStatusColors = {
-  confirmed: "bg-emerald-500",
-  failed: "bg-red-500",
-  shipped: "bg-blue-500",
-  delivered: "bg-green-500",
+  confirmed: "bg-emerald-500 hover:bg-emerald-600",
+  failed: "bg-red-500 hover:bg-red-600",
+
+  processing: "bg-orange-500 hover:bg-orange-600",
+  shipped: "bg-blue-500 hover:bg-blue-600",
+  delivered: "bg-green-500 hover:bg-green-600",
+  rejected: "bg-rose-500 hover:bg-rose-600",
 };
 
 const ShoppingOrders = () => {

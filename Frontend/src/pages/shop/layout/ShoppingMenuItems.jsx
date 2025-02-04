@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { logoutUser } from "@/store/slices/authSlice";
 
 import { ShoppingCartTile } from "./";
@@ -33,6 +33,11 @@ const menuItems = [
     path: "/shop",
   },
   {
+    id: "products",
+    label: "Products",
+    path: "/shop/listing",
+  },
+  {
     id: "men",
     label: "Men",
     path: "/shop/listing",
@@ -45,11 +50,6 @@ const menuItems = [
   {
     id: "kids",
     label: "Kids",
-    path: "/shop/listing",
-  },
-  {
-    id: "footwear",
-    label: "Footwear",
     path: "/shop/listing",
   },
   {
@@ -66,11 +66,17 @@ const menuItems = [
 
 const ShoppingMenuItems = ({ setOpenMenu }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [searchParams, setSearchParams] = useSearchParams(
+    new URLSearchParams()
+  );
 
   const handleListing = (value, group) => {
     setOpenMenu(false);
     // ? Navigate to home
-    if (value.id === "home") {
+    if (value.id === "home" || value.id === "products") {
+      sessionStorage.removeItem("filters");
       return navigate(value.path);
     }
 
@@ -81,7 +87,11 @@ const ShoppingMenuItems = ({ setOpenMenu }) => {
     };
 
     sessionStorage.setItem("filters", JSON.stringify(curFilters));
-    navigate(value.path);
+    if (location.pathname.includes("listing")) {
+      setSearchParams(new URLSearchParams(`?${group}=${value.id}`));
+    } else {
+      navigate("/shop/listing");
+    }
   };
 
   return (

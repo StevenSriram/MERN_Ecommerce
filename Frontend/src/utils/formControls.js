@@ -94,7 +94,7 @@ export const addProductFormControls = [
     type: "number",
     min: 0,
     max: 9999999999,
-    step: "0.5",
+    step: "0.01",
     placeholder: "Enter product price",
   },
   {
@@ -104,7 +104,7 @@ export const addProductFormControls = [
     type: "number",
     min: 0,
     max: 9999999999,
-    step: "0.5",
+    step: "0.01",
     placeholder: "Enter sale price (optional)",
   },
   {

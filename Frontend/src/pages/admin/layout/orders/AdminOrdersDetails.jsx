@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { CommonForm } from "@/components/custom";
 
 import { Badge } from "@/components/ui/badge";
@@ -12,10 +13,13 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Orbit } from "lucide-react";
-
-import { useDispatch, useSelector } from "react-redux";
-import { getOrderDetails } from "@/store/slices/orderSlice";
 import { useToast } from "@/hooks/use-toast";
+
+import {
+  getAllOrders,
+  getOrderDetails,
+  updateOrderStatus,
+} from "@/store/slices/orderSlice";
 
 const orderStatusFormControls = [
   {
@@ -42,11 +46,18 @@ const AdminOrdersDetails = ({ orderId, orderStatusColors }) => {
 
   const handleStatus = (e) => {
     e.preventDefault();
-    setOpenOrderStatus(false);
-
-    toast({
-      title: `Order Status Updated Successfully`,
+    dispatch(
+      updateOrderStatus({ orderId, orderStatus: formData?.status })
+    ).then((data) => {
+      if (data.payload?.success) {
+        toast({
+          title: data.payload?.message,
+        });
+        dispatch(getAllOrders());
+      }
     });
+
+    setOpenOrderStatus(false);
     setFormData({ status: "" });
   };
 
@@ -110,7 +121,31 @@ const AdminOrdersDetails = ({ orderId, orderStatusColors }) => {
               </Label>
             </div>
           </div>
-          <hr className="mt-4 mb-3" />
+          <hr className="my-2" />
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <div className="font-medium mb-2">Products Info</div>
+              <div className="grid gap-2 text-muted-foreground">
+                {orderDetails?.cartItems.map((item) => (
+                  <div
+                    key={item?.productId}
+                    className="flex items-center justify-between mb-2"
+                  >
+                    <img
+                      src={item?.image}
+                      className="w-12 h-12 object-cover rounded"
+                    />
+                    <Label className="text-md">
+                      {item?.title}
+                      <span className="ml-2 text-xs">x {item?.quantity}</span>
+                    </Label>
+                    <Label className="text-md">${item?.price}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <hr className="my-2" />
           <div className="grid gap-4">
             <div className="grid gap-2">
               <div className="font-medium mb-3">Shipping Info</div>
@@ -126,8 +161,7 @@ const AdminOrdersDetails = ({ orderId, orderStatusColors }) => {
             </div>
           </div>
 
-          {(orderDetails?.orderStatus !== "delivered" ||
-            orderDetails?.orderStatus !== "rejected") && (
+          {orderDetails?.orderStatus !== "failed" && (
             <CommonForm
               formControls={orderStatusFormControls}
               formData={formData}

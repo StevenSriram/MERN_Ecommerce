@@ -72,7 +72,7 @@ export const getCart = async (req, res) => {
     // ? Check Cart Exists and populate product
     const cart = await Cart.findOne({ userId }).populate({
       path: "items.productId",
-      select: "image title price salePrice",
+      select: "image title price salePrice totalStock",
     });
 
     if (!cart) {
@@ -96,6 +96,7 @@ export const getCart = async (req, res) => {
       title: item.productId?.title,
       price: item.productId?.price,
       salePrice: item.productId?.salePrice,
+      totalStock: item.productId?.totalStock,
       quantity: item.quantity,
     }));
 
@@ -154,7 +155,7 @@ export const editCart = async (req, res) => {
 
     await cart.populate({
       path: "items.productId",
-      select: "image title price salePrice",
+      select: "image title price salePrice totalStock",
     });
 
     const populateCartItems = cart.items.map((item) => ({
@@ -163,6 +164,7 @@ export const editCart = async (req, res) => {
       title: item.productId?.title,
       price: item.productId?.price,
       salePrice: item.productId?.salePrice,
+      totalStock: item.productId?.totalStock,
       quantity: item.quantity,
     }));
 
@@ -187,7 +189,7 @@ export const deleteCart = async (req, res) => {
 
     const cart = await Cart.findOne({ userId }).populate({
       path: "items.productId",
-      select: "image title price salePrice",
+      select: "image title price salePrice totalStock",
     });
 
     if (!cart) {
@@ -206,17 +208,13 @@ export const deleteCart = async (req, res) => {
     // ! Delete Cart Cache
     memoryCache.del(`cart-${userId}`);
 
-    await cart.populate({
-      path: "items.productId", // ? populate user Cart Items
-      select: "image title price salePrice",
-    });
-
     const populateCartItems = cart.items.map((item) => ({
       productId: item.productId?._id,
       image: item.productId?.image,
       title: item.productId?.title,
       price: item.productId?.price,
       salePrice: item.productId?.salePrice,
+      totalStock: item.productId?.totalStock,
       quantity: item.quantity,
     }));
 

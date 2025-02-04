@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,11 +17,23 @@ import { useDispatch, useSelector } from "react-redux";
 const ShoppingDetails = ({ openDetails, setOpenDetails }) => {
   const { productDetails } = useSelector((state) => state.shop);
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
 
   const dispatch = useDispatch();
   const { toast } = useToast();
 
-  const handleAddToCart = (productId) => {
+  const handleAddToCart = (productId, remainingStock) => {
+    const existingItem = cartItems?.items?.find(
+      (item) => item?.productId === productId
+    );
+    if (existingItem && existingItem?.quantity >= remainingStock) {
+      toast({
+        title: `You can't add more than ${remainingStock} of this product`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     dispatch(addToCart({ userId: user?._id, productId, quantity: 1 })).then(
       (data) => {
         if (data.payload?.success) {
@@ -48,6 +61,17 @@ const ShoppingDetails = ({ openDetails, setOpenDetails }) => {
             height={650}
             className="aspect-square rounded-lg w-full object-cover"
           />
+          {productDetails?.totalStock <= 10 ? (
+            <Badge className="absolute top-2 right-2 px-2 py-1 bg-orange-500 hover:bg-orange-600">
+              {`Only ${productDetails?.totalStock} left`}
+            </Badge>
+          ) : (
+            productDetails?.totalStock === 0 && (
+              <Badge className="absolute top-2 right-2 px-2 py-1 bg-red-500 hover:bg-red-600">
+                Out of Stock
+              </Badge>
+            )
+          )}
         </div>
         <div className="">
           <div>
@@ -73,7 +97,10 @@ const ShoppingDetails = ({ openDetails, setOpenDetails }) => {
           <div className="mt-4">
             <Button
               className="w-full"
-              onClick={() => handleAddToCart(productDetails?._id)}
+              onClick={() =>
+                handleAddToCart(productDetails?._id, productDetails?.totalStock)
+              }
+              disabled={productDetails?.totalStock === 0}
             >
               Add to Cart
             </Button>

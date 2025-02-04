@@ -70,6 +70,7 @@ const ShoppingCartTile = ({ cartItem }) => {
             variant="outline"
             className="h-8 w-8 rounded-full"
             size="icon"
+            disabled={cartItem?.quantity === cartItem?.totalStock}
             onClick={() =>
               handleEditCart(cartItem?.productId, cartItem?.quantity + 1)
             }

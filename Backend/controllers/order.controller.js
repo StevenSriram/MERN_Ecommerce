@@ -1,5 +1,6 @@
 import Order from "../modals/order.modal.js";
 import Cart from "../modals/cart.modal.js";
+import Product from "../modals/product.modal.js";
 
 import memoryCache from "../utils/nodeCache.js";
 
@@ -94,7 +95,27 @@ export const capturePayment = async (req, res) => {
     order.paymentId = paymentId;
     order.payerId = payerId;
 
-    // ! delete cart
+    // ? Reducing Stock
+    order.cartItems.forEach(async (item) => {
+      const product = await Product.findById(item.productId);
+      if (product) {
+        if (product.totalStock < item.quantity) {
+          return res.status(400).json({
+            success: false,
+            message: `Out of Stock for ${product.title}`,
+          });
+        }
+        product.totalStock -= item.quantity;
+
+        // ! Save Product
+        await product.save();
+
+        // ! Delete all Cache
+        memoryCache.flushAll();
+      }
+    });
+
+    // ? delete cart
     await Cart.findByIdAndDelete(order.cartId);
     // ! Delete Cart Cache
     memoryCache.del(`cart-${order.userId}`);
@@ -161,7 +182,7 @@ export const getOrders = async (req, res) => {
         .json({ success: true, allOrders: JSON.parse(orderCache) });
     }
 
-    const allOrders = await Order.find({ userId });
+    const allOrders = await Order.find({ userId }).sort({ orderDate: -1 });
     if (!allOrders) {
       return res
         .status(404)
@@ -187,7 +208,7 @@ export const getAllOrders = async (req, res) => {
         .json({ success: true, allOrders: JSON.parse(orderCache) });
     }
 
-    const allOrders = await Order.find();
+    const allOrders = await Order.find().sort({ orderDate: -1 });
     if (!allOrders) {
       return res
         .status(404)
@@ -198,6 +219,36 @@ export const getAllOrders = async (req, res) => {
     memoryCache.set("orders", JSON.stringify(allOrders));
 
     return res.status(200).json({ success: true, allOrders });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { orderStatus } = req.body;
+
+    // ? find Order and Update Order Details
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { orderStatus },
+      { new: true }
+    );
+
+    if (!order) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order Not Found" });
+    }
+
+    // ! Delete Order Cache
+    memoryCache.del("orders");
+    memoryCache.del(`orders-${order.userId}`);
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Order Updated Successfully" });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }

@@ -69,7 +69,7 @@ export const getProducts = async (req, res) => {
       });
     }
 
-    const allProducts = await Product.find({});
+    const allProducts = await Product.find({}).sort({ arrival: -1 });
 
     // ! Set Product Cache
     memoryCache.set("products", allProducts);

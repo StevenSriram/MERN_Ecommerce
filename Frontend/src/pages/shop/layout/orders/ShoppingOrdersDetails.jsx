@@ -18,11 +18,14 @@ import { getOrderDetails } from "@/store/slices/orderSlice";
 const ShoppingOrdersDetails = ({ orderId, orderStatusColors }) => {
   const dispatch = useDispatch();
   const { orderDetails } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.auth);
 
   const [openOrderDetails, setOpenOrderDetails] = useState(false);
 
   const handleOrderDetails = () => {
     dispatch(getOrderDetails(orderId));
+
+    console.log(orderDetails);
 
     if (!openOrderDetails) setOpenOrderDetails(true);
   };
@@ -72,12 +75,36 @@ const ShoppingOrdersDetails = ({ orderId, orderStatusColors }) => {
               </Label>
             </div>
           </div>
-          <hr className="my-4" />
+          <hr className="my-2" />
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <div className="font-medium">Shipping Info</div>
+              <div className="font-medium mb-2">Products Info</div>
               <div className="grid gap-2 text-muted-foreground">
-                <Label>UserId : {orderDetails?.userId}</Label>
+                {orderDetails?.cartItems.map((item) => (
+                  <div
+                    key={item?.productId}
+                    className="flex items-center justify-between mb-2"
+                  >
+                    <img
+                      src={item?.image}
+                      className="w-12 h-12 object-cover rounded"
+                    />
+                    <Label className="text-md">
+                      {item?.title}
+                      <span className="ml-2 text-xs">x {item?.quantity}</span>
+                    </Label>
+                    <Label className="text-md">${item?.price}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <hr className="my-2" />
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <div className="font-medium mb-2">Shipping Info</div>
+              <div className="grid gap-2 text-muted-foreground">
+                <Label className="mb-3">UserName : {user?.name}</Label>
                 <Label>{orderDetails?.addressInfo?.address}</Label>
                 <Label>{orderDetails?.addressInfo?.city}</Label>
                 <Label>{orderDetails?.addressInfo?.phone}</Label>
