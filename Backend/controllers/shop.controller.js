@@ -78,3 +78,41 @@ export const recommendedProducts = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const searchProducts = async (req, res) => {
+  try {
+    const { keyword } = req.params;
+
+    if (!keyword || typeof keyword !== "string" || !keyword.trim()) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid or empty keyword" });
+    }
+
+    const regexKey = new RegExp(keyword, "i");
+
+    // ! check Product Cache Found
+    if (memoryCache.has(`search-${keyword}`)) {
+      const productCache = memoryCache.get(`search-${keyword}`);
+      return res.status(200).json({ success: true, products: productCache });
+    }
+
+    const regexQuery = {
+      $or: [
+        { title: { $regex: regexKey } },
+        { description: { $regex: regexKey } },
+        { category: { $regex: regexKey } },
+        { brand: { $regex: regexKey } },
+      ],
+    };
+
+    const products = await Product.find(regexQuery);
+
+    // ! Set Product Cache
+    memoryCache.set(`search-${keyword}`, products);
+
+    res.status(200).json({ success: true, products });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

@@ -16,6 +16,9 @@ const initialState = {
   // ? Recommended Products
   productsForYou: [],
 
+  // ? Searched Products
+  productsSearch: [],
+
   //* single Product Detail
   productDetails: {},
 };
@@ -58,6 +61,18 @@ export const getRecommendedProducts = createAsyncThunk(
   }
 );
 
+export const getSearchProducts = createAsyncThunk(
+  "search/getSearchResults",
+  async (keyword, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/shop/search/${keyword}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const shopSlice = createSlice({
   name: "shop",
   initialState,
@@ -74,16 +89,20 @@ const shopSlice = createSlice({
     getProductDetails: (state, action) => {
       const productId = action.payload;
 
-      state.productDetails = state.productsList.find(
+      // ! Combining all products
+      const combinedProducts = [
+        ...state.productsList,
+        ...state.productsForYou,
+        ...state.productsSearch,
+      ];
+
+      state.productDetails = combinedProducts.find(
         (product) => product._id === productId
       );
+    },
 
-      // ! if product not found in productsList
-      if (!state.productDetails) {
-        state.productDetails = state.productsForYou.find(
-          (product) => product._id === productId
-        );
-      }
+    resetSearch: (state) => {
+      state.productsSearch = [];
     },
   },
   extraReducers: (builder) => {
@@ -125,9 +144,28 @@ const shopSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload?.message;
       });
+
+    // ? Get Searched Products State
+    builder
+      .addCase(getSearchProducts.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getSearchProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.productsSearch = action.payload?.success
+          ? action.payload?.products
+          : [];
+        state.error = null;
+      })
+      .addCase(getSearchProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload?.message;
+      });
   },
 });
 
-export const { resetPage, setPage, getProductDetails } = shopSlice.actions;
+export const { resetPage, setPage, getProductDetails, resetSearch } =
+  shopSlice.actions;
 
 export default shopSlice.reducer;

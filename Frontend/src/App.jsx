@@ -17,7 +17,7 @@ import {
   CheckoutPage,
   ListingPage,
 } from "./pages/shop";
-import { ShoppingPayment } from "./pages/shop/layout";
+import { ShoppingPayment, ShoppingSearch } from "./pages/shop/layout";
 
 import { NotFoundPage, UnAuthPage, PaymentReturnPage } from "./pages/others";
 import { Authorization, GifLoader } from "./components/custom";
@@ -84,6 +84,19 @@ const App = () => {
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="listing" element={<ListingPage />} />
             <Route path="payment-status" element={<ShoppingPayment />} />
+            <Route path="search" element={<ShoppingSearch />} />
+          </Route>
+
+          {/* Base route pointing to shop (/) */}
+          <Route
+            path="/"
+            element={
+              <Authorization>
+                <ShoppingLayout />
+              </Authorization>
+            }
+          >
+            <Route path="" element={<HomePage />} />
           </Route>
 
           {/* Payment Routes */}

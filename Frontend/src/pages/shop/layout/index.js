@@ -24,6 +24,7 @@ const ShoppingOrdersDetails = lazy(() =>
 );
 
 const ShoppingPayment = lazy(() => import("./orders/ShoppingPayment"));
+const ShoppingSearch = lazy(() => import("./products/ShoppingSearch"));
 
 export {
   ShoppingLayout,
@@ -40,4 +41,5 @@ export {
   ShoppingOrders,
   ShoppingOrdersDetails,
   ShoppingPayment,
+  ShoppingSearch,
 };

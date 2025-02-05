@@ -82,8 +82,6 @@ const ListingPage = () => {
     }
   }, [dispatch, filters, sort, page, limit]);
 
-  // ! console.log(productsList);
-
   const handleProductDetails = (productId) => {
     dispatch(getProductDetails(productId));
     if (!openDetails) setOpenDetails(true);

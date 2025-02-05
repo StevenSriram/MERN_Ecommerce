@@ -1,6 +1,6 @@
 import { Fragment, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CircleOff, LogOut, ShoppingCart, User } from "lucide-react";
+import { CircleOff, LogOut, Search, ShoppingCart, User } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ const menuItems = [
   {
     id: "home",
     label: "Home",
-    path: "/shop",
+    path: "/",
   },
   {
     id: "products",
@@ -107,6 +107,14 @@ const ShoppingMenuItems = ({ setOpenMenu }) => {
           {menuItem.label}
         </Label>
       ))}
+      <Search
+        className="w-8 h-8 ml-2 cursor-pointer hover:text-blue-600 
+        transform hover:scale-105 transition duration-100 ease-in-out"
+        onClick={() => {
+          setOpenMenu(false);
+          navigate("/shop/search");
+        }}
+      />
     </nav>
   );
 };
