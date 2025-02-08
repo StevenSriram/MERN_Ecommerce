@@ -1,9 +1,12 @@
+import { useDispatch, useSelector } from "react-redux";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+
 import { addToCart, getCartItems } from "@/store/slices/cartSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { getReviews } from "@/store/slices/reviewSlice";
 
 const ShoppingProductTile = ({ product, handleProductDetails }) => {
   const dispatch = useDispatch();
@@ -38,7 +41,13 @@ const ShoppingProductTile = ({ product, handleProductDetails }) => {
 
   return (
     <Card className="w-full max-w-sm mx-auto hover:border-slate-400 hover:shadow-lg hover:scale-95 transition duration-150">
-      <div onClick={() => handleProductDetails(product?._id)}>
+      <div
+        onClick={() => {
+          dispatch(getReviews(product?._id)).then(() => {
+            handleProductDetails(product?._id);
+          });
+        }}
+      >
         <div className="relative">
           <img
             src={product?.image}

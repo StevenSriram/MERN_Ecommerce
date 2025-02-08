@@ -95,7 +95,7 @@ const cartSlice = createSlice({
       })
       .addCase(getCartItems.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.cartItems = action.payload.cart;
+        state.cartItems = action.payload.success ? action.payload.cart : [];
       })
       .addCase(getCartItems.rejected, (state, action) => {
         state.isLoading = false;
@@ -128,7 +128,5 @@ const cartSlice = createSlice({
       });
   },
 });
-
-export const { computeCartTotal } = cartSlice.actions;
 
 export default cartSlice.reducer;

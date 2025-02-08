@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+axios.defaults.withCredentials = true;
+
 const initialState = {
   isLoading: false,
   addresses: [], // ? List of all addresses
@@ -86,7 +88,9 @@ const addressSlice = createSlice({
       })
       .addCase(getAddresses.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.addresses = action.payload.addresses;
+        state.addresses = action.payload.success
+          ? action.payload.addresses
+          : [];
       })
       .addCase(getAddresses.rejected, (state, action) => {
         state.isLoading = false;

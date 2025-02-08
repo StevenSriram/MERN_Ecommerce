@@ -40,6 +40,8 @@ export const getProducts = async (req, res) => {
     const sort = sortData(sortBy);
 
     // ? Count of Products
+    // * estimatedDocumentCount(filters) - optimized for large collections
+
     const totalProducts = await Product.countDocuments(filters);
     // ? Get filtered Products
     const allProducts = await Product.find(filters)

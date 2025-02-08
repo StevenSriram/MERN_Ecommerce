@@ -150,7 +150,9 @@ const orderSlice = createSlice({
       })
       .addCase(getAllOrders.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.orderList = action.payload.allOrders;
+        state.orderList = action.payload.success
+          ? action.payload.allOrders
+          : [];
       })
       .addCase(getAllOrders.rejected, (state) => {
         state.isLoading = false;

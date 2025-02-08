@@ -6,6 +6,7 @@ import shopReducer from "./slices/shopSlice";
 import cartReducer from "./slices/cartSlice";
 import addressReducer from "./slices/addressSlice";
 import orderReducer from "./slices/orderSlice";
+import reviewReducer from "./slices/reviewSlice";
 
 const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
     cart: cartReducer,
     address: addressReducer,
     order: orderReducer,
+    review: reviewReducer,
   },
   devTools: import.meta.env.MODE !== "production",
 });

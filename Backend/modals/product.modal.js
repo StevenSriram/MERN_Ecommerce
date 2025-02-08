@@ -9,6 +9,7 @@ const ProductSchema = new mongoose.Schema({
   price: Number,
   salePrice: Number,
   totalStock: Number,
+  rating: { type: Number, default: 0.0 },
   arrival: { type: Date, default: Date.now },
 });
 

@@ -1,4 +1,5 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,12 +8,11 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { addToCart, getCartItems } from "@/store/slices/cartSlice";
-import { Star } from "lucide-react";
 
-import { useDispatch, useSelector } from "react-redux";
+import { ShoppingReview } from "..";
+import { addToCart, getCartItems } from "@/store/slices/cartSlice";
+import { RatingStars } from "@/components/custom";
 
 const ShoppingDetails = ({ openDetails, setOpenDetails }) => {
   const { productDetails } = useSelector((state) => state.shop);
@@ -79,6 +79,13 @@ const ShoppingDetails = ({ openDetails, setOpenDetails }) => {
             <p className="text-muted-foreground text-md mb-5 mt-4">
               {productDetails?.description}
             </p>
+            <p className="text-muted-foreground text-md mb-5 mt-4">
+              <RatingStars
+                rating={productDetails?.rating}
+                size="h-4 w-4 inline-block mr-1"
+              />
+              ( {productDetails?.rating?.toFixed(1)} )
+            </p>
           </div>
           <div className="flex items-center justify-between">
             <p
@@ -108,95 +115,10 @@ const ShoppingDetails = ({ openDetails, setOpenDetails }) => {
 
           <hr className="border-t mt-4 border-muted-foreground" />
 
-          <div className="max-h-[200px] mt-2 p-2 overflow-auto">
-            <h2 className="text-xl font-bold mb-4">Reviews</h2>
-            <div className="grid gap-6">
-              <div className="flex gap-4">
-                <Avatar className="w-10 h-10 border">
-                  <AvatarFallback>SR</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Steven Sriram</h3>
-                  </div>
-                  <div className="flex items-center gap-0.5">
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    This is Good Product
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <Avatar className="w-10 h-10 border">
-                  <AvatarFallback>SR</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Steven Sriram</h3>
-                  </div>
-                  <div className="flex items-center gap-0.5">
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    This is Good Product
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <Avatar className="w-10 h-10 border">
-                  <AvatarFallback>SR</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Steven Sriram</h3>
-                  </div>
-                  <div className="flex items-center gap-0.5">
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    This is Good Product
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <Avatar className="w-10 h-10 border">
-                  <AvatarFallback>SR</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Steven Sriram</h3>
-                  </div>
-                  <div className="flex items-center gap-0.5">
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                    <Star className="h-4 w-4 fill-yellow-300" />
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    This is Good Product
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="mt-6 flex gap-2">
-              <Input type="text" placeholder="Write a review..." />
-              <Button>Submit</Button>
-            </div>
-          </div>
+          <ShoppingReview
+            productId={productDetails?._id}
+            setOpenDetails={setOpenDetails}
+          />
         </div>
       </DialogContent>
     </Dialog>

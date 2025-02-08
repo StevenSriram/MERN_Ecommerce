@@ -25,8 +25,6 @@ const ShoppingOrdersDetails = ({ orderId, orderStatusColors }) => {
   const handleOrderDetails = () => {
     dispatch(getOrderDetails(orderId));
 
-    console.log(orderDetails);
-
     if (!openOrderDetails) setOpenOrderDetails(true);
   };
 

@@ -9,6 +9,8 @@ const ProductLoader = lazy(() => import("./ProductLoader"));
 
 const SlideShow = lazy(() => import("./SlideShow"));
 
+const RatingStars = lazy(() => import("./RatingStars"));
+
 export {
   Authorization,
   CommonForm,
@@ -16,4 +18,5 @@ export {
   GifLoader,
   ProductLoader,
   SlideShow,
+  RatingStars,
 };

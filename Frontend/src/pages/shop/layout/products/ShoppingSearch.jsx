@@ -21,6 +21,7 @@ const ShoppingSearch = () => {
 
   const dispatch = useDispatch();
   const { isLoading, productsSearch } = useSelector((state) => state.shop);
+  const { reviewList } = useSelector((state) => state.review);
 
   useEffect(() => {
     if (searchKey.trim() && searchKey.length >= 3) {
@@ -30,7 +31,7 @@ const ShoppingSearch = () => {
       setSearchParams(new URLSearchParams());
       dispatch(resetSearch());
     }
-  }, [searchKey, dispatch, searchParams]);
+  }, [searchKey, dispatch, searchParams, reviewList]);
 
   const handleProductDetails = (productId) => {
     dispatch(getProductDetails(productId));

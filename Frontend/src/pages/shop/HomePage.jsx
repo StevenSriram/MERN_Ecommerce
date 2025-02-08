@@ -58,6 +58,8 @@ const HomePage = () => {
 
   const dispatch = useDispatch();
   const { productsList, productsForYou } = useSelector((state) => state.shop);
+  // * Reviews Updated then Render Home
+  const { reviewList } = useSelector((state) => state.review);
 
   useEffect(() => {
     dispatch(
@@ -69,7 +71,7 @@ const HomePage = () => {
       })
     );
     dispatch(getRecommendedProducts());
-  }, [dispatch]);
+  }, [dispatch, reviewList]);
 
   const handleProductDetails = (productId) => {
     dispatch(getProductDetails(productId));

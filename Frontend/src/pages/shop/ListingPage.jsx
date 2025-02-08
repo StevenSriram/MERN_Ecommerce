@@ -53,6 +53,7 @@ const ListingPage = () => {
   const { isLoading, productsList, totalProducts, page, limit } = useSelector(
     (state) => state.shop
   );
+  const { reviewList } = useSelector((state) => state.review);
 
   // ? Retrieving filters from session storage
   useEffect(() => {
@@ -80,7 +81,7 @@ const ListingPage = () => {
         })
       );
     }
-  }, [dispatch, filters, sort, page, limit]);
+  }, [dispatch, filters, sort, page, limit, reviewList]);
 
   const handleProductDetails = (productId) => {
     dispatch(getProductDetails(productId));
@@ -161,17 +162,23 @@ const ListingPage = () => {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-          {isLoading
-            ? Array.from({ length: 8 }).map((_, index) => (
-                <ProductLoader key={index} />
-              ))
-            : productsList.map((product) => (
-                <ShoppingProductTile
-                  key={product?._id}
-                  product={product}
-                  handleProductDetails={handleProductDetails}
-                />
-              ))}
+          {isLoading ? (
+            Array.from({ length: 8 }).map((_, index) => (
+              <ProductLoader key={index} />
+            ))
+          ) : productsList.length > 0 ? (
+            productsList.map((product) => (
+              <ShoppingProductTile
+                key={product?._id}
+                product={product}
+                handleProductDetails={handleProductDetails}
+              />
+            ))
+          ) : (
+            <p className="text-2xl col-span-2 md:col-span-3 lg:col-span-4 mx-auto font-mono text-gray-800">
+              No Products Found. Try others ...
+            </p>
+          )}
         </div>
         <ShoppingPagination />
       </div>
