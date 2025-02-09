@@ -64,7 +64,9 @@ export const getAllOrders = createAsyncThunk(
     try {
       let response;
       if (userId) {
-        response = await axios.get(`${API_URL}/api/order/${userId}`);
+        response = await axios.get(
+          `${API_URL}/api/order/${encodeURIComponent(userId)}`
+        );
       } else {
         response = await axios.get(`${API_URL}/api/order`);
       }
@@ -80,7 +82,7 @@ export const updateOrderStatus = createAsyncThunk(
   async ({ orderId, orderStatus }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${API_URL}/api/order/update/${orderId}`,
+        `${API_URL}/api/order/update/${encodeURIComponent(orderId)}`,
         {
           orderStatus,
         }

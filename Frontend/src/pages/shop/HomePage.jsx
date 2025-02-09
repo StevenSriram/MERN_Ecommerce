@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-
-import bannerOne from "../../assets/banner-1.webp";
-import bannerTwo from "../../assets/banner-2.webp";
-import bannerThree from "../../assets/banner-3.webp";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import {
   ArrowUp,
@@ -22,13 +20,12 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import {
   getFilteredProducts,
   getProductDetails,
   getRecommendedProducts,
 } from "@/store/slices/shopSlice";
+import { getBanners } from "@/store/slices/featureSlice";
 
 import { SlideShow } from "@/components/custom";
 import { ShoppingProductTile, ShoppingDetails, ShoppingFooter } from "./layout";
@@ -52,16 +49,17 @@ const brandsWithIcon = [
 ];
 
 const HomePage = () => {
-  const slides = [bannerOne, bannerTwo, bannerThree];
   const [openDetails, setOpenDetails] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
+  const { bannerList } = useSelector((state) => state.feature);
   const { productsList, productsForYou } = useSelector((state) => state.shop);
   // * Reviews Updated then Render Home
   const { reviewList } = useSelector((state) => state.review);
 
   useEffect(() => {
+    dispatch(getBanners());
     dispatch(
       getFilteredProducts({
         filterParams: {},
@@ -93,7 +91,7 @@ const HomePage = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Banner Slide Show */}
-      <SlideShow slides={slides} />
+      <SlideShow slides={bannerList.map((banner) => banner.image)} />
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">

@@ -7,6 +7,7 @@ import cartReducer from "./slices/cartSlice";
 import addressReducer from "./slices/addressSlice";
 import orderReducer from "./slices/orderSlice";
 import reviewReducer from "./slices/reviewSlice";
+import featureReducer from "./slices/featureSlice";
 
 const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
     address: addressReducer,
     order: orderReducer,
     review: reviewReducer,
+    feature: featureReducer,
   },
   devTools: import.meta.env.MODE !== "production",
 });

@@ -46,7 +46,8 @@ const AdminProductTile = ({
   };
 
   const handleDelete = (productId, productImage) => {
-    const publicId = productImage.split("/").pop().split(".")[0];
+    const [folderName, fileName] = productImage.split("/").slice(-2);
+    const publicId = `${folderName}/${fileName.split(".")[0]}`;
 
     dispatch(deleteProduct(productId)).then((data) => {
       if (data.payload?.success) {

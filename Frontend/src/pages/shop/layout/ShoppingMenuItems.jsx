@@ -98,7 +98,7 @@ const ShoppingMenuItems = ({ setOpenMenu }) => {
     <nav className="flex flex-col mb-10 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {menuItems.map((menuItem) => (
         <Label
-          className="text-sm font-medium cursor-pointer"
+          className="text-sm font-medium cursor-pointer hover:text-blue-400 transition duration-150 ease-in-out"
           key={menuItem.id}
           onClick={() => {
             handleListing(menuItem, "category");
@@ -152,8 +152,19 @@ const ShoppingMenuContents = ({ setOpenMenu }) => {
   return (
     <div className="flex justify-between items-center gap-4">
       <Sheet open={openCart} onOpenChange={handleOpen}>
-        <Button variant="outline" size="sm" onClick={() => setOpenCart(true)}>
+        <Button
+          className="relative"
+          variant="outline"
+          size="sm"
+          onClick={() => setOpenCart(true)}
+        >
           <ShoppingCart className="w-8 h-8 " />
+
+          {cartItems?.items?.length > 0 && (
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-pink-500 rounded-full text-center text-xs font-semibold text-white">
+              {cartItems?.items?.length}
+            </span>
+          )}
         </Button>
         <SheetContent side="right" className="max-w-lg pl-4 pr-0">
           <SheetDescription className="sr-only">Your Cart</SheetDescription>

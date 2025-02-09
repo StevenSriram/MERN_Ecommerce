@@ -9,7 +9,6 @@ export const uploadImage = async (req, res) => {
 
     const url = `data:${req.file?.mimetype};base64,${b64}`;
     const uploadResult = await uploadCloudinary(url);
-    // ? console.log(uploadResult);
 
     res.status(200).json({ success: true, uploadResult });
   } catch (error) {

@@ -52,7 +52,8 @@ const AdminImageUploader = ({ imageFile, setImageFile, editMode }) => {
     dispatch(clearImageURL());
 
     // ! Remove Image From Cloudinary
-    const publicId = uploadedImageURL.split("/").pop().split(".")[0];
+    const [folderName, fileName] = uploadedImageURL.split("/").slice(-2);
+    const publicId = `${folderName}/${fileName.split(".")[0]}`;
     dispatch(deleteImage(publicId));
 
     inputRef.current.value = null;

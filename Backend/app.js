@@ -15,6 +15,7 @@ import cartRoutes from "./routes/cart.routes.js";
 import addressRoutes from "./routes/address.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 import reviewRoutes from "./routes/review.routes.js";
+import featureRoutes from "./routes/feature.routes.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -47,6 +48,8 @@ app.use("/api/address", addressRoutes);
 app.use("/api/order", orderRoutes);
 // ? Review Routes
 app.use("/api/review", reviewRoutes);
+// ? Feature Routes
+app.use("/api/feature", featureRoutes);
 
 // * Testing Route
 app.get("/", (req, res) => {

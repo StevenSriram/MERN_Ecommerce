@@ -32,7 +32,9 @@ export const getCartItems = createAsyncThunk(
   "cart/getCart",
   async ({ userId }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/api/cart/${userId}`);
+      const response = await axios.get(
+        `${API_URL}/api/cart/${encodeURIComponent(userId)}`
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -61,7 +63,9 @@ export const deleteFromCart = createAsyncThunk(
   async ({ userId, productId }, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `${API_URL}/api/cart/delete/${userId}/${productId}`
+        `${API_URL}/api/cart/delete/${encodeURIComponent(
+          userId
+        )}/${encodeURIComponent(productId)}`
       );
       return response.data;
     } catch (error) {

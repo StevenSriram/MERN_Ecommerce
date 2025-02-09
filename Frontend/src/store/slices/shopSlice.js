@@ -65,7 +65,9 @@ export const getSearchProducts = createAsyncThunk(
   "search/getSearchResults",
   async (keyword, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/api/shop/search/${keyword}`);
+      const response = await axios.get(
+        `${API_URL}/api/shop/search/${encodeURIComponent(keyword)}`
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

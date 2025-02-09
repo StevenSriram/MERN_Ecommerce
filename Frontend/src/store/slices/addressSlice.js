@@ -26,7 +26,9 @@ export const getAddresses = createAsyncThunk(
   "address/getAddresses",
   async ({ userId }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/api/address/${userId}`);
+      const response = await axios.get(
+        `${API_URL}/api/address/${encodeURIComponent(userId)}`
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -39,7 +41,9 @@ export const deleteAddress = createAsyncThunk(
   async ({ userId, addressId }, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `${API_URL}/api/address/delete/${userId}/${addressId}`
+        `${API_URL}/api/address/delete/${encodeURIComponent(
+          userId
+        )}/${encodeURIComponent(addressId)}`
       );
       return response.data;
     } catch (error) {
@@ -53,7 +57,9 @@ export const editAddress = createAsyncThunk(
   async ({ userId, addressId, formData }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${API_URL}/api/address/edit/${userId}/${addressId}`,
+        `${API_URL}/api/address/edit/${encodeURIComponent(
+          userId
+        )}/${encodeURIComponent(addressId)}`,
         formData
       );
       return response.data;

@@ -41,7 +41,7 @@ export const deleteImage = createAsyncThunk(
   async (publicID, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `${API_URL}/api/admin/delete-image/${publicID}`
+        `${API_URL}/api/admin/delete-image/${encodeURIComponent(publicID)}`
       );
       return response.data;
     } catch (error) {
@@ -82,7 +82,7 @@ export const editProduct = createAsyncThunk(
   async ({ productId, formData }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${API_URL}/api/admin/edit-product/${productId}`,
+        `${API_URL}/api/admin/edit-product/${encodeURIComponent(productId)}`,
         formData
       );
       return response.data;
@@ -97,7 +97,7 @@ export const deleteProduct = createAsyncThunk(
   async (productId, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `${API_URL}/api/admin/delete-product/${productId}`
+        `${API_URL}/api/admin/delete-product/${encodeURIComponent(productId)}`
       );
       return response.data;
     } catch (error) {
