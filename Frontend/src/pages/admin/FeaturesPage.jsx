@@ -1,4 +1,4 @@
-import { AdminBanner, AdminCategory } from "./layout";
+import { AdminBanner, AdminDiscount } from "./layout";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
@@ -10,13 +10,13 @@ const AccountPage = () => {
           <Tabs defaultValue={"banner"}>
             <TabsList>
               <TabsTrigger value="banner">Banners</TabsTrigger>
-              <TabsTrigger value="category">Categorys</TabsTrigger>
+              <TabsTrigger value="discount">Discounts</TabsTrigger>
             </TabsList>
             <TabsContent value="banner">
               <AdminBanner />
             </TabsContent>
-            <TabsContent value="category">
-              <AdminCategory />
+            <TabsContent value="discount">
+              <AdminDiscount />
             </TabsContent>
           </Tabs>
         </div>

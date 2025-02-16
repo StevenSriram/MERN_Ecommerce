@@ -51,11 +51,6 @@ app.use("/api/review", reviewRoutes);
 // ? Feature Routes
 app.use("/api/feature", featureRoutes);
 
-// * Testing Route
-app.get("/", (req, res) => {
-  res.send("API Running...");
-});
-
 app.listen(port, () => {
   connectDB();
   console.log("Server Started...");

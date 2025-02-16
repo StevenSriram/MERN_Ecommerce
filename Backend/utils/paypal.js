@@ -6,7 +6,11 @@ paypal.configure({
   client_secret: process.env.PAYPAL_CLIENT_SECRET,
 });
 
-export const createPaymentJSON = (cartItems, totalAmount) => {
+export const createPaymentJSON = (cartItems) => {
+  const totalAmount = cartItems
+    .reduce((acc, cur) => acc + cur.quantity * cur.price, 0)
+    .toFixed(2);
+
   const payment_json = {
     intent: "sale",
     payer: {
@@ -35,7 +39,6 @@ export const createPaymentJSON = (cartItems, totalAmount) => {
       },
     ],
   };
-
   return payment_json;
 };
 

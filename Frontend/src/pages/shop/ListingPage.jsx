@@ -1,14 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import ShoppingFilter from "./layout/products/ShoppingFilter";
-import { sortOptions } from "@/utils/productsUtils";
-import ShoppingProductTile from "./layout/products/ShoppingProductTile";
-import {
-  getFilteredProducts,
-  getProductDetails,
-  resetPage,
-} from "@/store/slices/shopSlice";
+import { useSearchParams } from "react-router-dom";
 
 import {
   DropdownMenu,
@@ -18,12 +10,21 @@ import {
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { ProductLoader } from "@/components/custom";
-
 import { ArrowUpDownIcon } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
-import ShoppingPagination from "./layout/products/ShoppingPagination";
-import ShoppingDetails from "./layout/products/ShoppingDetails";
+import { ProductLoader } from "@/components/custom";
+import {
+  ShoppingFilter,
+  ShoppingProductTile,
+  ShoppingPagination,
+  ShoppingDetails,
+} from "./layout";
+
+import {
+  getFilteredProducts,
+  getProductDetails,
+  resetPage,
+} from "@/store/slices/shopSlice";
+import { sortOptions } from "@/utils/productsUtils";
 
 const getQueryParams = (filters, page, limit) => {
   const queryParams = [];
@@ -59,7 +60,7 @@ const ListingPage = () => {
   useEffect(() => {
     // ! Reset page when Filters changed
     dispatch(resetPage());
-    setSort("price-lowtohigh");
+    setSort("newest");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
   }, [searchParams]);
 

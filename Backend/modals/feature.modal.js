@@ -10,4 +10,16 @@ const bannerSchema = new mongoose.Schema(
 
 const Banner = mongoose.model("Banner", bannerSchema);
 
-export { Banner };
+const discountSchema = new mongoose.Schema(
+  {
+    name: String,
+    description: String,
+    code: String,
+    percent: Number,
+  },
+  { timestamps: true }
+);
+
+const Discount = mongoose.model("Discount", discountSchema);
+
+export { Banner, Discount };

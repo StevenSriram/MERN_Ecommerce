@@ -7,6 +7,7 @@ import {
   deleteImage,
   addProduct,
   getProducts,
+  getLowStockProducts,
   editProduct,
   deleteProduct,
 } from "../controllers/admin.controller.js";
@@ -17,6 +18,7 @@ router.post("/upload-image", upload.single("imageFile"), uploadImage);
 router.delete("/delete-image/:id", deleteImage);
 
 router.get("/products", getProducts);
+router.get("/low-stock", getLowStockProducts);
 
 router.post("/add-product", addProduct);
 router.put("/edit-product/:id", editProduct);

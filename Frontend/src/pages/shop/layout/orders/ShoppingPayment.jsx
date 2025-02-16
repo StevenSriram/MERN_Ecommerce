@@ -5,13 +5,15 @@ import successImg from "../../../../assets/success.webp";
 import failureImg from "../../../../assets/failure.webp";
 import { Button } from "@/components/ui/button";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { failedPayment } from "@/store/slices/orderSlice";
+import { clearCart } from "@/store/slices/cartSlice";
 
 const ShoppingPayment = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const completed = location.state?.completed ?? false;
@@ -22,6 +24,7 @@ const ShoppingPayment = () => {
 
       dispatch(failedPayment(orderId)).then((data) => {
         if (data.payload?.success) {
+          dispatch(clearCart());
           sessionStorage.removeItem("orderId");
         }
       });

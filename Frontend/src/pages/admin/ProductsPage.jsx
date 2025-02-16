@@ -16,6 +16,7 @@ import {
   editProduct,
   clearImageURL,
   getProducts,
+  getLowStockProducts,
 } from "@/store/slices/adminSlice";
 import { toast } from "@/hooks/use-toast";
 
@@ -77,11 +78,15 @@ const ProductsPage = () => {
     });
   };
 
-  // ? console.log(formData);
-
   return (
     <>
-      <div className="mb-5 w-full flex justify-end">
+      <div className="mb-5 w-full flex justify-between">
+        <Button
+          className="rounded-full bg-red-700 hover:bg-red-800"
+          onClick={() => dispatch(getLowStockProducts())}
+        >
+          Low Stock
+        </Button>
         <Button
           className="ml-3"
           onClick={() => {

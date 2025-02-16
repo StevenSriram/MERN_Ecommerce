@@ -47,6 +47,7 @@ export const addProduct = async (req, res) => {
 
     // ! Delete Product Cache
     memoryCache.del("products");
+    memoryCache.del("low-stock");
 
     res
       .status(200)
@@ -79,6 +80,31 @@ export const getProducts = async (req, res) => {
   }
 };
 
+export const getLowStockProducts = async (req, res) => {
+  try {
+    // ! check Product Cache Found
+    if (memoryCache.has("low-stock")) {
+      const productCache = memoryCache.get("low-stock");
+
+      return res.status(200).json({
+        success: true,
+        allProducts: productCache,
+      });
+    }
+
+    const allProducts = await Product.find({ totalStock: { $lt: 10 } }).sort({
+      arrival: -1,
+    });
+
+    // ! Set Product Cache
+    memoryCache.set("low-stock", allProducts);
+
+    res.status(200).json({ success: true, allProducts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export const editProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -100,6 +126,7 @@ export const editProduct = async (req, res) => {
 
     // ! Delete Product Cache
     memoryCache.del("products");
+    memoryCache.del("low-stock");
 
     res.status(200).json({
       success: true,
@@ -126,6 +153,7 @@ export const deleteProduct = async (req, res) => {
 
     // ! Delete Product Cache
     memoryCache.del("products");
+    memoryCache.del("low-stock");
 
     res
       .status(200)

@@ -13,7 +13,7 @@ const AdminProductTile = lazy(() => import("./products/AdminProductTile"));
 const AdminOrdersDetails = lazy(() => import("./orders/AdminOrdersDetails"));
 
 const AdminBanner = lazy(() => import("./features/AdminBanner"));
-const AdminCategory = lazy(() => import("./features/AdminCategory"));
+const AdminDiscount = lazy(() => import("./features/AdminDiscount"));
 
 export {
   AdminLayout,
@@ -24,5 +24,5 @@ export {
   AdminProductTile,
   AdminOrdersDetails,
   AdminBanner,
-  AdminCategory,
+  AdminDiscount,
 };

@@ -77,6 +77,18 @@ export const getProducts = createAsyncThunk(
   }
 );
 
+export const getLowStockProducts = createAsyncThunk(
+  "admin/getLowStockProducts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/admin/low-stock`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const editProduct = createAsyncThunk(
   "admin/editProduct",
   async ({ productId, formData }, { rejectWithValue }) => {
@@ -175,6 +187,24 @@ const adminSlice = createSlice({
         state.error = null;
       })
       .addCase(getProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload?.message;
+      });
+
+    // ? Get Low Stock Products State
+    builder
+      .addCase(getLowStockProducts.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getLowStockProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.productsList = action.payload?.success
+          ? action.payload?.allProducts
+          : [];
+        state.error = null;
+      })
+      .addCase(getLowStockProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload?.message;
       });

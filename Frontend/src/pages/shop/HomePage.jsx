@@ -5,17 +5,17 @@ import { useNavigate } from "react-router-dom";
 import {
   ArrowUp,
   BabyIcon,
-  Cat,
   EyeClosed,
-  Footprints,
-  HousePlug,
-  Images,
-  Scale,
+  Dumbbell,
+  House,
+  PlugZap,
   ShirtIcon,
   Volleyball,
   Vote,
-  WatchIcon,
-  Weight,
+  WashingMachine,
+  Headphones,
+  Shapes,
+  HandHeart,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -34,18 +34,18 @@ const categoriesWithIcon = [
   { id: "men", label: "Men", icon: ShirtIcon },
   { id: "women", label: "Women", icon: EyeClosed },
   { id: "kids", label: "Kids", icon: BabyIcon },
-  { id: "accessories", label: "Accessories", icon: WatchIcon },
-  { id: "footwear", label: "Footwear", icon: Footprints },
-  { id: "household", label: "Household", icon: HousePlug },
+  { id: "electronics", label: "Electronics", icon: PlugZap },
+  { id: "household", label: "Household", icon: House },
+  { id: "sports", label: "Sports", icon: Dumbbell },
 ];
 
 const brandsWithIcon = [
   { id: "nike", label: "Nike", icon: Vote },
+  { id: "zara", label: "Zara", icon: HandHeart },
+  { id: "disney", label: "Disney Store", icon: Shapes },
+  { id: "samsung", label: "Samsung", icon: Headphones },
+  { id: "bosch", label: "Bosch", icon: WashingMachine },
   { id: "adidas", label: "Adidas", icon: Volleyball },
-  { id: "puma", label: "Puma", icon: Cat },
-  { id: "levi", label: "Levi's", icon: Weight },
-  { id: "zara", label: "Zara", icon: Images },
-  { id: "h&m", label: "H&M", icon: Scale },
 ];
 
 const HomePage = () => {

@@ -84,7 +84,6 @@ const addressSlice = createSlice({
       })
       .addCase(addAddress.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload.message;
       });
 
     // ? Get Addresses
@@ -100,7 +99,6 @@ const addressSlice = createSlice({
       })
       .addCase(getAddresses.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload.message;
       });
 
     // ? Delete Address
@@ -113,7 +111,6 @@ const addressSlice = createSlice({
       })
       .addCase(deleteAddress.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload.message;
       });
 
     // ? Edit Address
@@ -126,7 +123,6 @@ const addressSlice = createSlice({
       })
       .addCase(editAddress.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload.message;
       });
   },
 });

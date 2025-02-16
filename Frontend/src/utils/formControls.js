@@ -159,5 +159,26 @@ export const addressFormControls = [
   },
 ];
 
+export const discountFormControls = [
+  {
+    label: "Name",
+    name: "name",
+    componentType: "text",
+    placeholder: "Enter Discount Name",
+  },
+  {
+    label: "Description",
+    name: "description",
+    componentType: "text",
+    placeholder: "Enter Discount Description",
+  },
+  {
+    label: "Percent",
+    name: "percent",
+    componentType: "number",
+    placeholder: "Enter Discount Percentage",
+  },
+];
+
 // * Web3Forms
 export const ACCESS_TOKEN = "c9a99748-858d-4330-bcb8-30d967267ad2";

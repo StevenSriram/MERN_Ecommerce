@@ -24,14 +24,14 @@ export const createOrder = async (req, res) => {
     } = req.body;
 
     // ? Creating a Payment JSON for Paypal
-    const payment_json = createPaymentJSON(cartItems, totalAmount);
+    const payment_json = createPaymentJSON(cartItems);
 
     // ? Creating a Payment
     paypal.payment.create(payment_json, async (error, payment) => {
       if (error) {
         return res
           .status(500)
-          .json({ success: false, payment_json, message: error.message });
+          .json({ success: false, payment_json, message: error });
       }
 
       // * Creating a New Order
@@ -70,9 +70,11 @@ export const createOrder = async (req, res) => {
       });
     });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ success: false, error: "server", message: error.message });
+    return res.status(500).json({
+      success: false,
+      error: "server",
+      message: error.message,
+    });
   }
 };
 

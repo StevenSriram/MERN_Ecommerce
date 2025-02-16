@@ -53,8 +53,8 @@ const menuItems = [
     path: "/shop/listing",
   },
   {
-    id: "accessories",
-    label: "Accessories",
+    id: "electronics",
+    label: "Electronics",
     path: "/shop/listing",
   },
   {
