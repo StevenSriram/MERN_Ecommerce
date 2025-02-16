@@ -4,8 +4,9 @@
   "main": "Backend/app.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon Backend/app.js",
-    "dev": "npm run dev --prefix Frontend"
+    "dev": "cross-env NODE_ENV=development nodemon Backend/app.js",
+    "start": "cross-env NODE_ENV=production node Backend/app.js",
+    "build": "npm install & npm install --prefix Frontend && npm run build --prefix Frontend"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^9.3.0",
+    "cross-env": "^7.0.3",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.9"
   }

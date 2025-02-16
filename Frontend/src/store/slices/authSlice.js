@@ -12,7 +12,8 @@ const initialState = {
   isCheckingAuth: false,
 };
 
-const API_URL = "http://localhost:5000";
+const API_URL =
+  import.meta.env.MODE === "production" ? "" : "http://localhost:5000";
 
 export const signupUser = createAsyncThunk(
   "auth/signUp",

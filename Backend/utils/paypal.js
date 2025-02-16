@@ -1,3 +1,6 @@
+import { dotenvConfig } from "../../config.js";
+dotenvConfig();
+
 import paypal from "paypal-rest-sdk";
 
 paypal.configure({

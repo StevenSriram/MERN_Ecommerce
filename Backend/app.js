@@ -1,11 +1,11 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import path from "path";
 
-import helmet from "helmet";
-import morgan from "morgan";
+import { dotenvConfig, helmetConfig, morganConfig } from "../config.js";
 
-import config from "../env.config.js";
+dotenvConfig();
 import connectDB from "./db/configDB.js";
 
 import authRoutes from "./routes/auth.routes.js";
@@ -18,7 +18,8 @@ import reviewRoutes from "./routes/review.routes.js";
 import featureRoutes from "./routes/feature.routes.js";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
+const __dirname = path.resolve();
 
 // ? Middle - Wares
 app.use(express.json());
@@ -31,8 +32,8 @@ app.use(
 );
 app.use(cookieParser());
 
-app.use(helmet());
-app.use(morgan("dev"));
+app.use(helmetConfig());
+app.use(morganConfig());
 
 // ? Authentication Routes
 app.use("/api/auth", authRoutes);
@@ -50,6 +51,16 @@ app.use("/api/order", orderRoutes);
 app.use("/api/review", reviewRoutes);
 // ? Feature Routes
 app.use("/api/feature", featureRoutes);
+
+// ! Frontend React Application
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/Frontend/dist")));
+  console.log(path.join(__dirname, "/Frontend/dist"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "Frontend", "dist", "index.html"));
+  });
+}
 
 app.listen(port, () => {
   connectDB();

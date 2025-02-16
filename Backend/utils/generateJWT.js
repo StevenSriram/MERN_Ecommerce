@@ -1,3 +1,6 @@
+import { dotenvConfig } from "../../config.js";
+dotenvConfig();
+
 import jwt from "jsonwebtoken";
 
 export const generateJWT = (res, user) => {

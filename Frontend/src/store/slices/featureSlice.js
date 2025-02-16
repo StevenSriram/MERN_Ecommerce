@@ -13,7 +13,8 @@ const initialState = {
   discountList: [],
 };
 
-const API_URL = "http://localhost:5000";
+const API_URL =
+  import.meta.env.MODE === "production" ? "" : "http://localhost:5000";
 
 export const addBanner = createAsyncThunk(
   "feature/addBanner",

@@ -1,3 +1,6 @@
+import { dotenvConfig } from "../../config.js";
+dotenvConfig();
+
 import { v2 as cloudinary } from "cloudinary";
 import multer from "multer";
 
@@ -14,7 +17,7 @@ cloudinary.config({
 const uploadCloudinary = async (file) => {
   const response = await cloudinary.uploader.upload(file, {
     resource_type: "image",
-    folder: "products",
+    folder: "ecommerce",
   });
 
   return response;

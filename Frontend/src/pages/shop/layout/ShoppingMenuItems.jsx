@@ -107,26 +107,32 @@ const ShoppingMenuItems = ({ setOpenMenu }) => {
           {menuItem.label}
         </Label>
       ))}
-      <Search
-        className="w-8 h-8 ml-2 cursor-pointer hover:text-blue-600 
-        transform hover:scale-105 transition duration-100 ease-in-out"
+      <div
+        className="flex items-center justify-between"
         onClick={() => {
           setOpenMenu(false);
           navigate("/shop/search");
         }}
-      />
+      >
+        <span className="lg:hidden inline-block text-blue-600">
+          {" "}
+          Search Products{" "}
+        </span>
+        <Search
+          className="w-8 h-8 ml-2 max-lg:inline-block max-lg:text-blue-600 cursor-pointer hover:text-blue-600 
+        transform hover:scale-105 transition duration-100 ease-in-out"
+        />
+      </div>
     </nav>
   );
 };
 
-const ShoppingMenuContents = ({ setOpenMenu }) => {
+const ShoppingMenuContents = ({ setOpenMenu, openCart, setOpenCart }) => {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [openCart, setOpenCart] = useState(false);
 
   const handleLogout = () => {
     setOpenMenu(false);
@@ -150,10 +156,10 @@ const ShoppingMenuContents = ({ setOpenMenu }) => {
   };
 
   return (
-    <div className="flex justify-between items-center gap-4">
+    <div className="flex justify-end items-center gap-4">
       <Sheet open={openCart} onOpenChange={handleOpen}>
         <Button
-          className="relative"
+          className="relative max-lg:hidden"
           variant="outline"
           size="sm"
           onClick={() => setOpenCart(true)}
@@ -166,7 +172,7 @@ const ShoppingMenuContents = ({ setOpenMenu }) => {
             </span>
           )}
         </Button>
-        <SheetContent side="right" className="max-w-lg pl-4 pr-0">
+        <SheetContent side="right" className="max-w-md pl-4 pr-0">
           <SheetDescription className="sr-only">Your Cart</SheetDescription>
           <SheetHeader className="border-b pb-1 mb-3">
             <SheetTitle>Your Cart</SheetTitle>
