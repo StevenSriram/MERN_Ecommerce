@@ -24,7 +24,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/Sheet";
+} from "@/components/ui/sheet";
 
 const menuItems = [
   {

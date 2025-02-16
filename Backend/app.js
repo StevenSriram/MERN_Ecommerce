@@ -33,7 +33,7 @@ app.use(
 app.use(cookieParser());
 
 app.use(helmetConfig());
-app.use(morganConfig());
+// * app.use(morganConfig());
 
 // ? Authentication Routes
 app.use("/api/auth", authRoutes);

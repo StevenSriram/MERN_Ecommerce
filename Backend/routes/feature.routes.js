@@ -8,8 +8,12 @@ import {
   getDiscounts,
   deleteDiscount,
 } from "../controllers/feature.controller.js";
+import { getDashboardData } from "../controllers/dashboard.controller.js";
 
 const router = express.Router();
+
+// * Dashboard Routes
+router.get("/dashboard", getDashboardData);
 
 // * Banner Routes
 router.post("/add-banner", addBanner);

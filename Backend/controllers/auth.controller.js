@@ -1,6 +1,8 @@
 import User from "../modals/user.modal.js";
 import bcrypt from "bcryptjs";
+
 import { generateJWT } from "../utils/generateJWT.js";
+import memoryCache from "../utils/nodeCache.js";
 
 export const signUp = async (req, res) => {
   const { name, email, password } = req.body;
@@ -24,6 +26,9 @@ export const signUp = async (req, res) => {
 
     // ! Save New User
     await user.save();
+
+    // ! Delete Cache
+    memoryCache.del("dashboard");
 
     user = { ...user._doc, password: undefined };
     const token = generateJWT(res, user);

@@ -48,6 +48,7 @@ export const addProduct = async (req, res) => {
     // ! Delete Product Cache
     memoryCache.del("products");
     memoryCache.del("low-stock");
+    memoryCache.del("dashboard");
 
     res
       .status(200)
@@ -127,6 +128,7 @@ export const editProduct = async (req, res) => {
     // ! Delete Product Cache
     memoryCache.del("products");
     memoryCache.del("low-stock");
+    memoryCache.del("dashboard");
 
     res.status(200).json({
       success: true,
@@ -154,6 +156,7 @@ export const deleteProduct = async (req, res) => {
     // ! Delete Product Cache
     memoryCache.del("products");
     memoryCache.del("low-stock");
+    memoryCache.del("dashboard");
 
     res
       .status(200)

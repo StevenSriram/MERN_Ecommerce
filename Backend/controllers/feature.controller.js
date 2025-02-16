@@ -96,9 +96,6 @@ export const getDiscounts = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    // ? Check User Already  Orderes
-    const userOrders = await Order.countDocuments({ userId });
-
     // ? Check Cache exits
     if (memoryCache.has(`discount-cupons-${userId}`)) {
       const discountCuponCache = memoryCache.get(`discount-cupons-${userId}`);
@@ -106,6 +103,9 @@ export const getDiscounts = async (req, res) => {
         .status(200)
         .json({ success: true, discountCupons: discountCuponCache });
     }
+
+    // ? Check User Already  Orderes
+    const userOrders = await Order.countDocuments({ userId });
 
     let discountCupons = await Discount.find({});
     if (userOrders > 0) {

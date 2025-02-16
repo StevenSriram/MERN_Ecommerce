@@ -108,6 +108,7 @@ export const capturePayment = async (req, res) => {
           });
         }
         product.totalStock -= item.quantity;
+        product.sales += item.quantity;
 
         // ! Save Product
         await product.save();

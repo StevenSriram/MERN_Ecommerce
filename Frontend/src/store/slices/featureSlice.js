@@ -11,10 +11,25 @@ const initialState = {
 
   // ? List of all Discounts
   discountList: [],
+
+  // ? Dashboard Data
+  dashboardData: {},
 };
 
 const API_URL =
   import.meta.env.MODE === "production" ? "" : "http://localhost:5000";
+
+export const getDashboardData = createAsyncThunk(
+  "feature/getDashboardData",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/feature/dashboard`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const addBanner = createAsyncThunk(
   "feature/addBanner",
@@ -106,6 +121,18 @@ const featureSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // ? Get Dashboard Data
+    builder
+      .addCase(getDashboardData.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getDashboardData.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.dashboardData = action.payload.dashboardStats;
+      })
+      .addCase(getDashboardData.rejected, (state) => {
+        state.isLoading = false;
+      });
     // ? Add Banner
     builder
       .addCase(addBanner.pending, (state) => {
