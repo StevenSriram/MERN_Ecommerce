@@ -14,7 +14,7 @@ const Slideshow = ({ slides }) => {
   }, [slides.length]);
 
   return (
-    <div className="relative w-full h-[600px] lg:h-[500px] overflow-hidden">
+    <div className="relative w-full h-[400px] lg:h-[500px] overflow-hidden">
       {slides.map((slide, index) => (
         <img
           key={index}
