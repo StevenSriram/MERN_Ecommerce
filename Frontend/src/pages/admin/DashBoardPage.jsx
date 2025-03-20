@@ -60,11 +60,13 @@ const DashBoardPage = () => {
             <CardTitle>Total Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold text-green-600">${totalRevenue}</p>
+            <p className="text-4xl font-bold text-green-600">
+              ${totalRevenue?.toFixed(2)}
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="max-xl:col-span-2 shadow-md">
+        <Card className="max-xl:col-span-2 max-sm:col-span-4 shadow-md">
           <CardHeader>
             <CardTitle>Total Customers</CardTitle>
           </CardHeader>
@@ -73,7 +75,7 @@ const DashBoardPage = () => {
           </CardContent>
         </Card>
 
-        <Card className="max-xl:col-span-2 shadow-md">
+        <Card className="max-xl:col-span-2 max-sm:col-span-4 shadow-md">
           <CardHeader>
             <CardTitle>Total Orders</CardTitle>
           </CardHeader>
@@ -85,7 +87,7 @@ const DashBoardPage = () => {
 
       <div className="grid grid-cols-4 gap-6">
         {/* Top Selling Product */}
-        <Card className="max-2xl:col-span-2 shadow-sm">
+        <Card className="max-2xl:col-span-2 max-md:col-span-4 shadow-sm">
           <CardHeader>
             <CardTitle>Top-Selling Product</CardTitle>
           </CardHeader>
@@ -95,7 +97,7 @@ const DashBoardPage = () => {
                 <img
                   src={topSellingProduct?.image}
                   alt={topSellingProduct?.title}
-                  className="w-full h-36 object-cover rounded-md mt-2 border-2 border-gray-300"
+                  className="w-full max-md:h-[350px] md:h-48 object-cover rounded-md mt-2 border-2 border-gray-300"
                 />
                 <p className="mt-2 text-lg font-bold">
                   {topSellingProduct?.title}
@@ -111,12 +113,12 @@ const DashBoardPage = () => {
         </Card>
 
         {/* Average Order Value */}
-        <Card className="max-2xl:col-span-2 shadow-sm">
+        <Card className="max-2xl:col-span-2 max-md:col-span-4 shadow-sm">
           <CardHeader>
             <CardTitle>Average Order Value</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
-            <NotepadText className="w-28 h-28 mx-auto text-gray-400" />
+            <NotepadText className="w-36 h-36 mt-6 mx-auto text-gray-400" />
             <p className="mt-6 text-3xl font-bold">${avgOrderValue}</p>
           </CardContent>
         </Card>

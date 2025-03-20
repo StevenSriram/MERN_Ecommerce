@@ -48,7 +48,10 @@ const ShoppingDetails = ({ openDetails, setOpenDetails }) => {
 
   return (
     <Dialog open={openDetails} onOpenChange={setOpenDetails}>
-      <DialogContent className="grid grid-cols-2 gap-6 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
+      <DialogContent
+        className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:p-12 
+      max-md:overflow-auto max-md:max-h-[550px] max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]"
+      >
         <DialogDescription className="sr-only">
           Product Details of Product ID: {productDetails?._id}
         </DialogDescription>

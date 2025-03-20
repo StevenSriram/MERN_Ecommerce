@@ -69,8 +69,9 @@ export const addProductFormControls = [
       { value: "women", label: "Women" },
       { value: "kids", label: "Kids" },
       { value: "accessories", label: "Accessories" },
-      { value: "footwear", label: "Footwear" },
+      { id: "electronics", label: "Electronics" },
       { value: "household", label: "Household" },
+      { id: "sports", label: "Sports" },
     ],
   },
   {
@@ -80,11 +81,14 @@ export const addProductFormControls = [
     componentType: "select",
     options: [
       { value: "nike", label: "Nike" },
-      { value: "adidas", label: "Adidas" },
-      { value: "puma", label: "Puma" },
-      { value: "levi", label: "Levi's" },
       { value: "zara", label: "Zara" },
+      { value: "levi", label: "Levi's" },
+      { id: "disney", label: "Disney Store" },
       { value: "h&m", label: "H&M" },
+      { id: "samsung", label: "Samsung" },
+      { id: "bosch", label: "Bosch" },
+      { value: "puma", label: "Puma" },
+      { value: "adidas", label: "Adidas" },
     ],
   },
   {
